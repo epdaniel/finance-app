@@ -32,10 +32,11 @@ class GoogleBtn extends Component {
                 accessToken: response.accessToken
             }));
         }
+        alert("Logged in succesfully as" + profile.getName());
     }
 
     logout(response) {
-        UserProfile.logout();
+        UserProfile.logOut();
         this.setState(state => ({
             isLogined: false,
             accessToken: ''
