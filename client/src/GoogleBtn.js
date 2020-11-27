@@ -11,8 +11,8 @@ class GoogleBtn extends Component {
         super(props);
 
         this.state = {
-            isLogined: false,
-            accessToken: ''
+            isLogined: UserProfile.tryRememberLogin(),
+            //accessToken: ''
         };
 
         this.login = this.login.bind(this);
@@ -24,22 +24,21 @@ class GoogleBtn extends Component {
     login(response) {
         let profile = response.getBasicProfile();
         UserProfile.login(response.getAuthResponse().id_token, profile.getName(), profile.getImageUrl());
-        console.log('Log in from: ' + response.getAuthResponse().id_token);
-        console.log('Name: ' + profile.getName());
+        //console.log('Log in from: ' + response.getAuthResponse().id_token);
+        //console.log('Name: ' + profile.getName());
         if (response.accessToken) {
             this.setState(state => ({
                 isLogined: true,
-                accessToken: response.accessToken
+                //accessToken: response.accessToken
             }));
         }
-        alert("Logged in succesfully as" + profile.getName());
     }
 
     logout(response) {
         UserProfile.logOut();
         this.setState(state => ({
             isLogined: false,
-            accessToken: ''
+            //accessToken: ''
         }));
     }
 
@@ -55,13 +54,16 @@ class GoogleBtn extends Component {
         return (
             <div>
                 {  this.state.isLogined ?
-                    <GoogleLogout
-                        clientId={CLIENT_ID}
-                        buttonText='Sign out'
-                        onLogoutSuccess={this.logout}
-                        onFailure={this.handleLogoutFailure}
-                    >
-                    </GoogleLogout> : <GoogleLogin
+                    <div>
+                        <img style={userGoogleImgStyle} src={UserProfile.getImgUrl()} alt="User"></img>
+                        <b> {UserProfile.getName()} </b>
+                        <GoogleLogout
+                            clientId={CLIENT_ID}
+                            buttonText='Sign out'
+                            onLogoutSuccess={this.logout}
+                            onFailure={this.handleLogoutFailure}
+                        >
+                        </GoogleLogout></div> : <GoogleLogin
                         clientId={CLIENT_ID}
                         buttonText='Sign in'
                         onSuccess={this.login}
@@ -75,5 +77,9 @@ class GoogleBtn extends Component {
     }
 }
 
+const userGoogleImgStyle = {
+    width: "30px",
+    marginBottom: "-10px",
+}
 
 export default GoogleBtn;
