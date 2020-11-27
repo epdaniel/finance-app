@@ -57,6 +57,7 @@ class GoogleBtn extends Component {
                     <div>
                         <img style={userGoogleImgStyle} src={UserProfile.getImgUrl()} alt="User"></img>
                         <b> {UserProfile.getName()} </b>
+                        <br></br><br></br>
                         <GoogleLogout
                             clientId={CLIENT_ID}
                             buttonText='Sign out'
@@ -80,6 +81,7 @@ class GoogleBtn extends Component {
 const userGoogleImgStyle = {
     width: "30px",
     marginBottom: "-10px",
+    borderRadius: "50%",
 }
 
 export default GoogleBtn;
