@@ -10,7 +10,7 @@ let UserProfile = (function () {
 
   let setName = function (name) {
     full_name = name;
-    // Also set this in cookie/localStorage
+    localStorage.setItem('fullName', name);
   };
 
   let getId = function () {
@@ -19,6 +19,7 @@ let UserProfile = (function () {
 
   let setId = function (newId) {
     id = newId;
+    localStorage.setItem('ID', newId);
   };
 
   let getImgUrl = function () {
@@ -27,13 +28,15 @@ let UserProfile = (function () {
 
   let setImgUrl = function (url) {
     img_url = url;
+    localStorage.setItem('userIMG', url);
   };
 
   let logOut = function () {
-    this.setId(-1);
+    this.setId(null);
     this.setName("");
     this.setImgUrl("");
     this.setLoggedIn(false);
+    localStorage.clear();
   }
 
   let login = function (id, name, url) {
@@ -51,6 +54,14 @@ let UserProfile = (function () {
     m_isLoggedIn = status;
   }
 
+  let tryRememberLogin = function () {
+    if (localStorage.getItem('ID') !== null) {
+      this.login(localStorage.getItem('ID'), localStorage.getItem('fullName'), localStorage.getItem('userIMG'));
+      return true;
+    }
+    return false;
+  }
+
   return {
     getName: getName,
     setName: setName,
@@ -62,6 +73,7 @@ let UserProfile = (function () {
     isLoggedIn: isLoggedIn,
     setLoggedIn: setLoggedIn,
     login: login,
+    tryRememberLogin: tryRememberLogin,
   }
 
 })();
