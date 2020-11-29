@@ -6,12 +6,14 @@ const path = require('path');
 // Require Route
 const api = require('./routes/routes');
 
+//Mongo code
+const db = "finance_app" //STG
 const { MongoClient } = require('mongodb');
-const uri = "mongodb+srv://danielep:fAppAdmin%40389@financeappcluster.fu8tv.mongodb.net/finance_app-stg?retryWrites=true&w=majority";
+const { Console } = require('console');
+const uri = "mongodb+srv://danielep:fAppAdmin%40389@financeappcluster.fu8tv.mongodb.net/" + db + "?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
-
 // Set our backend port to be either an environment variable or port 5000
 const port = process.env.PORT || 5000;
 
@@ -31,7 +33,7 @@ app.use(bodyParser.urlencoded({
 app.use(cors());
 
 // Configure app to use route
-app.use('/api/v1/', api);
+app.use('/', api);
 
 // This middleware informs the express application to serve our compiled React files
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
@@ -42,80 +44,46 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging')
     });
 };
 
-// Catch any bad requests
-// app.get('*', (req, res) => {
-//     res.status(200).json({
-//         msg: 'Catch All'
-//     });
-// });
+//--------------------------------------------------------------------------------------------
 
-
-
+//Runs the server 
 (async () => {
     try {
         await client.connect();
-        console.log("Connected!");
-        //await listDatabases(client);
+        //console.log("DB Connected!");
     } catch (e) {
         console.error(e);
-    } finally {
-        //await client.close();
     }
-
-    // Configure our server to listen on the port defiend by our port variable
     app.listen(port);
-
     console.log(`BACK_END_SERVICE_PORT: ${port}`)
 })().catch(console.error);
 
-async function listDatabases(client) {
-    databasesList = await client.db().admin().listDatabases();
+//--------------------------------------------------------------------------------------------
 
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-};
-
-app.get('/new', (req, res) => {
-    console.log("got new ")
+app.post('/entry/new', (req, res) => {
     createEntry();
     res.status(200).json({
         msg: 'Catch All'
     });
 });
 
-app.get('/get', (req, res) => {
-    let result;
-    (async () => {
-        result = await getEntriesByDay();
-        console.log("in get " + result)
-        res.status(200).json(result);
-    })();
-    console.log("in get2 " + result)
 
+app.get('/entry/getAll', (req, res) => {
+    client.db(db).collection("entries").find({ userId: parseInt(req.headers["id"]) }).toArray().then(result => {
+        res.json(result);
+    }
+    );
 });
 
-async function createEntry() {
+async function createEntry(id, desc, amount, cat, subcat, time) {
     let entry = {
-        userId: 1,
-        timestamp: new Date(),
-        amount: 500,
-        description: "test2",
-        catergory: "cat",
-        subCatergory: "subcat"
+        userId: id,
+        description: desc,
+        amount: amount,
+        category: cat,
+        subCategory: subcat,
+        timestamp: time,
     }
-    const result = await client.db("finance_app").collection("entries").insertOne(entry);
-    console.log(`New listing created with the following id: ${result.insertedId}`);
+    const result = await client.db(db).collection("entries").insertOne(entry);
+    //console.log(`New listing created with the following id: ${result.insertedId}`);
 };
-
-async function getEntriesByDay() {
-    result = await client.db("finance_app").collection("entries")
-        .findOne({ description: "test2" });
-
-    if (result) {
-        console.log(result);
-        return result;
-    } else {
-        console.log(`No listings found with the name`);
-    }
-
-}

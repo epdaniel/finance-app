@@ -1,35 +1,34 @@
-
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios'
 import GoogleBtn from './GoogleBtn';
+import Entry from './Entry';
+import NewEntry from './NewEntry';
+import UserProfile from './userProfile';
+
 
 class App extends Component {
   state = {
-    response: {}
+    entries: []
   };
 
-  componentDidMount() {
-    axios.get('/api/v1/say-something').then((res) => {
-      const response = res.data;
-      this.setState({ response });
-    });
+  loadAllEntries() {
+    let id = UserProfile.getId();
+    if (id !== -1) {
+      axios.get('/entry/getAll', {
+        headers: {
+          'id': 1  //change to UserProfile.getId();
+        }
+      }).then((res) => {
+        this.setState({ entries: res.data });
+      });
+    }
   }
 
-  clickbtn() {
-    console.log("button clicked");
-    axios.get('/new').then((res) => {
-      console.log("got ans")
-    });
-  };
+  componentDidMount() {
+    this.loadAllEntries();
+  }
 
-
-  getEntry() {
-    axios.get('/get').then((res) => {
-      console.log("got ans!")
-      console.log(res.data);
-    });
-  };
 
   render() {
     return (
@@ -37,9 +36,14 @@ class App extends Component {
         <br></br>
         <GoogleBtn></GoogleBtn>
         <h1>Finance App</h1>
-        <h1>{this.state.response.body}</h1>
-        <button onClick={this.clickbtn}>Add entry</button>
-        <button onClick={this.getEntry}>Get entry</button>
+        <NewEntry></NewEntry>
+        <h2>Transactions:</h2>
+        {this.state.entries.length === 0 ? <div>No Transactions yet.</div> :
+          this.state.entries.map((data, key) => {
+            return <Entry key={key} entry={data}></Entry>;
+          })
+        }
+
       </div>
     );
   }

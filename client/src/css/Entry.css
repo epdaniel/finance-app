@@ -1,0 +1,13 @@
+.Entry{
+    width: 500px;
+    height:80px;
+    border: 1px solid black;
+    padding: 1px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+.EntryDesc{
+    font-size: 16px;
+}

@@ -1,0 +1,14 @@
+.NewEntry{
+    width: 295px;
+    margin: auto;
+}
+
+.NewEntryLabel{
+    float:left;
+    margin-top: 1px;
+}
+
+.NewEntryInput{
+    float:right;
+    margin-bottom: 1px;
+}
