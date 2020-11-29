@@ -1,8 +1,9 @@
 import './css/NewEntry.css';
-import axios from 'axios'
+//import axios from 'axios'
 const { Component } = require("react");
 
 class NewEntry extends Component {
+    // eslint-disable-next-line 
     constructor(props) {
         super(props);
     }

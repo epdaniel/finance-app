@@ -38,7 +38,7 @@ class App extends Component {
         <h1>Finance App</h1>
         <NewEntry></NewEntry>
         <h2>Transactions:</h2>
-        {this.state.entries.length === 0 ? <div>No Transactions yet.</div> :
+        {(!Array.isArray(this.state.entries) || this.state.entries.length === 0) ? <div>No Transactions yet.</div> :
           this.state.entries.map((data, key) => {
             return <Entry key={key} entry={data}></Entry>;
           })
