@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.addEntryButton{
+  min-width: 100px;
+  padding: 16px 32px;
+  border-radius: 4px;
+  border: none;
+  background: #141414;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+}
