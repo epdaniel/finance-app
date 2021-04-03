@@ -1,4 +1,4 @@
-import './css/NewEntry.css';
+import '../css/NewEntry.css';
 //import axios from 'axios'
 const { Component } = require("react");
 

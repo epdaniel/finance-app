@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios'
-import Entry from './Entry';
-import NewEntry from './NewEntry';
-import GoogleBtn from './GoogleBtn';
-import UserProfile from './userProfile';
+import Entry from './components/Entry';
+import NewEntry from './components/NewEntry';
+import GoogleBtn from './components/GoogleBtn';
+import UserProfile from './components/userProfile';
 
 
 function App(props) {
   const [showAddEntryModal, setShowAddEntryModal] = useState(false);
 
+  const toggleAddEntryModal = () => {
+    setShowAddEntryModal(prev => !prev);
+  }
 
   function loadAllEntries() {
     let id = UserProfile.getId();
@@ -19,7 +22,8 @@ function App(props) {
           id: 1  //change to UserProfile.getId();
         }
       }).then((res) => {
-        this.setState({ entries: res.data });
+        //update entries
+        //this.setState({ entries: res.data });
       });
     }
   }

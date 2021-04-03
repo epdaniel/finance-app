@@ -1,4 +1,4 @@
-import './css/Entry.css';
+import '../css/Entry.css';
 const { Component } = require("react");
 
 class Entry extends Component {
