@@ -37,6 +37,11 @@
   }
 }
 
+*{
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
 .addEntryButton{
   min-width: 100px;
   padding: 16px 32px;

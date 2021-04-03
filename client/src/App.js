@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './App.css';
+import './css/App.css';
 import axios from 'axios'
 import { NewEntry } from './components/NewEntry';
 import GoogleBtn from './components/GoogleBtn';
@@ -10,7 +10,6 @@ function App() {
   const [showEntryModal, setShowEntryModal] = useState(false);
 
   const toggleEntryModal = () => {
-    console.log(showEntryModal)
     setShowEntryModal(prev => !prev);
   }
 
@@ -36,8 +35,8 @@ function App() {
       <GoogleBtn></GoogleBtn>
       <h1>Finance App</h1>
 
-      <button class="addEntryButton" onClick={toggleEntryModal}>Add entry</button>
-      <NewEntry showModal={showEntryModal} />
+      <button className="addEntryButton" onClick={toggleEntryModal}>Add entry</button>
+      <NewEntry showModal={showEntryModal} setShowModal={toggleEntryModal} />
 
       <h2>Transactions:</h2>
       {/* {(!Array.isArray(this.state.entries) || this.state.entries.length === 0) ? <div>No Transactions yet.</div> :
