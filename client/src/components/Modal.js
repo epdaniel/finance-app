@@ -1,6 +1,9 @@
 import { MdClose } from "react-icons/md";
 import React, { useRef, useEffect } from "react";
 
+//TODO: useStyles instead bro
+import "../css/DetailedEntry.css";
+
 export const Modal = ({ showModal, setShowModal, children }) => {
   const modalRef = useRef();
 

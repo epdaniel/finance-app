@@ -1,18 +1,3 @@
-.EntryContainer {
-  width: 100% !important;
-  margin: 0 !important;
-}
-
-.NewEntryLabel {
-  float: left;
-  margin-top: 1px;
-}
-
-.NewEntryInput {
-  float: right;
-  margin-bottom: 1px;
-}
-
 .backgroundDiv {
   width: 100%;
   height: 100%;

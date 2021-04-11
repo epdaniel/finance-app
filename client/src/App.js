@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import "./css/App.css";
 import axios from "axios";
-import { DetailedEntry } from "./components/DetailedEntry";
+import DetailedEntry from "./components/DetailedEntry";
 import { Modal } from "./components/Modal";
 import GoogleBtn from "./components/GoogleBtn";
 import UserProfile from "./components/userProfile";
 
 function App() {
   const [showEntryModal, setShowEntryModal] = useState(false);
+  const [showLogInError, setLogInError] = useState(false);
 
   const toggleEntryModal = () => {
-    setShowEntryModal((prev) => !prev);
+    if (UserProfile.isLoggedIn()) setShowEntryModal((prev) => !prev);
+    else {
+      setLogInError(true);
+    }
   };
 
   // function loadAllEntries() {
@@ -33,12 +37,18 @@ function App() {
     <>
       <div className="App">
         <br></br>
-        <GoogleBtn></GoogleBtn>
+        <GoogleBtn logInCallback={() => setLogInError(false)}></GoogleBtn>
         <h1>Finance App</h1>
 
         <button className="addEntryButton" onClick={toggleEntryModal}>
           Add entry
         </button>
+        {showLogInError && (
+          <p>
+            <br />
+            Please log in first!
+          </p>
+        )}
         {/* <DetailedEntry showModal={showEntryModal} setShowModal={toggleEntryModal} /> */}
         <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
           <DetailedEntry />

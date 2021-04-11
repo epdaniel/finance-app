@@ -1,12 +1,22 @@
-import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
 import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { useForm, Controller } from "react-hook-form";
 import { Grid, TextField, Typography, Button } from "@material-ui/core";
-//Date-time picker
+//DateTime picker
 import DateFnsUtils from "@date-io/date-fns";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
-//TODO: useStyles instead bro
-import "../css/DetailedEntry.css";
+const styles = {
+  EntryContainer: {
+    width: "100%",
+    margin: 0,
+  },
+  modalButton: {
+    marginLeft: "10px",
+    marginRight: "10px",
+  },
+};
 
 const defaultValues = {
   desc: "",
@@ -16,25 +26,26 @@ const defaultValues = {
   date: new Date(),
 };
 
-export const DetailedEntry = () => {
+const DetailedEntry = (props) => {
   const { handleSubmit, reset, control } = useForm({ defaultValues });
-  const onSubmit = (data) => console.log(data);
-
-  //     addEntry() {
-  //         //Save inputs to state
-  //         // check all inputs are there
-  //         //send inputs using axios
-  //         //updated the entries (how to send alert to main app? - maybe take parameters in constructor?)
-  //         // axios.post('/entry/new').then((res) => {
-  //         //   this.loadAllEntries(); //probably bad, just add entry
-  //         // });
-  //     }
+  const onSubmit = (data) => {
+    console.log(data);
+    data["isExpense"] = true;
+    //updated the entries (how to send alert to main app? - maybe take parameters in constructor?)
+    axios
+      .post("/entries/add", {
+        ...data,
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid
         container
-        className="EntryContainer"
+        className={props.classes.EntryContainer}
         spacing={8}
         direction="row"
         justify="center"
@@ -114,14 +125,17 @@ export const DetailedEntry = () => {
             )}
           />
         </Grid>
-        <Grid item xs={3} />
-        <Grid item xs={3}>
-          <Button type="submit" variant="contained" color="primary">
-            Add
-          </Button>
-        </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12}>
           <Button
+            className={props.classes.modalButton}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            Add Expense
+          </Button>
+          <Button
+            className={props.classes.modalButton}
             type="button"
             variant="contained"
             color="secondary"
@@ -130,8 +144,9 @@ export const DetailedEntry = () => {
             Clear
           </Button>
         </Grid>
-        <Grid item xs={3} />
       </Grid>
     </form>
   );
 };
+
+export default withStyles(styles)(DetailedEntry);
