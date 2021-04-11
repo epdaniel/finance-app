@@ -13,7 +13,7 @@ class GoogleBtn extends Component {
     this.state = {
       isLoggedIn: UserProfile.tryRememberLogin(),
       logInCallback: props.logInCallback,
-      //accessToken: '' //TODO: what's this?
+      //accessToken: '' //TODO: what's this? think it's an access token to identify the user to google's services
     };
 
     this.login = this.login.bind(this);

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./css/App.css";
 import axios from "axios";
-import DetailedEntry from "./components/DetailedEntry";
-import { Modal } from "./components/Modal";
+import Modal from "./components/Modal";
 import GoogleBtn from "./components/GoogleBtn";
 import UserProfile from "./components/userProfile";
+import DetailedEntry from "./components/DetailedEntry";
 
 function App() {
   const [showEntryModal, setShowEntryModal] = useState(false);

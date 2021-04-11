@@ -26,7 +26,7 @@ const defaultValues = {
   date: new Date(),
 };
 
-const DetailedEntry = (props) => {
+const DetailedEntry = ({ classes }) => {
   const { handleSubmit, reset, control } = useForm({ defaultValues });
   const onSubmit = (data) => {
     console.log(data);
@@ -45,7 +45,7 @@ const DetailedEntry = (props) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid
         container
-        className={props.classes.EntryContainer}
+        className={classes.EntryContainer}
         spacing={8}
         direction="row"
         justify="center"
@@ -127,7 +127,7 @@ const DetailedEntry = (props) => {
         </Grid>
         <Grid item xs={12}>
           <Button
-            className={props.classes.modalButton}
+            className={classes.modalButton}
             type="submit"
             variant="contained"
             color="primary"
@@ -135,7 +135,7 @@ const DetailedEntry = (props) => {
             Add Expense
           </Button>
           <Button
-            className={props.classes.modalButton}
+            className={classes.modalButton}
             type="button"
             variant="contained"
             color="secondary"
