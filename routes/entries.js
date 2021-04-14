@@ -33,6 +33,7 @@ router.post("/add", async (req, res) => {
     const newEntry = await entry.save();
     res.json(newEntry);
   } catch (err) {
+    console.log('error')
     res.json({ message: err });
   }
 });

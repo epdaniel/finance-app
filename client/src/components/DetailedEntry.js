@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { useForm, Controller } from "react-hook-form";
-import { Grid, TextField, Typography, Button } from "@material-ui/core";
+import { Grid, TextField, Typography, Button, FormControl, RadioGroup, Radio, FormControlLabel } from "@material-ui/core";
 //DateTime picker
 import DateFnsUtils from "@date-io/date-fns";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -30,7 +30,7 @@ const DetailedEntry = ({ classes }) => {
   const { handleSubmit, reset, control } = useForm({ defaultValues });
   const onSubmit = (data) => {
     console.log(data);
-    data["isExpense"] = true;
+    data["isExpense"] = true; //todo: fix this crap
     //updated the entries (how to send alert to main app? - maybe take parameters in constructor?)
     axios
       .post("/entries/add", {
@@ -58,12 +58,10 @@ const DetailedEntry = ({ classes }) => {
           <Controller
             name="desc"
             control={control}
-            render={({ field: { onChange, value, ref } }) => (
+            render={({ field }) => (
               <TextField
                 label="Description"
-                onChange={onChange}
-                defaultValue={value}
-                inputRef={ref}
+                {...field}
               />
             )}
           />
@@ -72,12 +70,11 @@ const DetailedEntry = ({ classes }) => {
           <Controller
             name="sum"
             control={control}
-            render={({ field: { onChange, value, ref } }) => (
+            render={({ field }) => (
               <TextField
                 label="Sum"
-                onChange={onChange}
-                value={value}
-                inputRef={ref}
+                type="number"
+                {...field}
               />
             )}
           />
@@ -86,12 +83,10 @@ const DetailedEntry = ({ classes }) => {
           <Controller
             name="category"
             control={control}
-            render={({ field: { onChange, value, ref } }) => (
+            render={({ field }) => (
               <TextField
                 label="Category"
-                onChange={onChange}
-                value={value}
-                inputRef={ref}
+                {...field}
               />
             )}
           />
@@ -100,21 +95,19 @@ const DetailedEntry = ({ classes }) => {
           <Controller
             name="subcat"
             control={control}
-            render={({ field: { onChange, value, ref } }) => (
+            render={({ field }) => (
               <TextField
                 label="Sub-Category"
-                onChange={onChange}
-                value={value}
-                inputRef={ref}
+                {...field}
               />
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={12}>
+        <Grid item xs={12} sm={6}>
           <Controller
             name="date"
             control={control}
-            render={({ field: { onChange, value, ref } }) => (
+            render={({ field: { onChange, value } }) => (
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   label="Date"
@@ -122,6 +115,20 @@ const DetailedEntry = ({ classes }) => {
                   onChange={onChange}
                 />
               </MuiPickersUtilsProvider>
+            )}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Controller
+            name="subcat"
+            control={control}
+            render={({ field }) => (
+              <FormControl component="fieldset">
+                <RadioGroup aria-label="entryType" name="entryType1" {...field}>
+                  <FormControlLabel value="expense" control={<Radio />} label="Expense" />
+                  <FormControlLabel value="income" control={<Radio />} label="Income" />
+                </RadioGroup>
+              </FormControl>
             )}
           />
         </Grid>
