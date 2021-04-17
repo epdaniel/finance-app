@@ -24,22 +24,25 @@ const defaultValues = {
   category: "",
   subcat: "",
   date: new Date(),
+  isExpense: "expense",
 };
 
 const DetailedEntry = ({ classes }) => {
   const { handleSubmit, reset, control } = useForm({ defaultValues });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    data['isExpense'] = data['isExpense'] === 'expense'
     console.log(data);
-    data["isExpense"] = true; //todo: fix this crap
     //updated the entries (how to send alert to main app? - maybe take parameters in constructor?)
-    axios
-      .post("/entries/add", {
-        ...data,
-      })
-      .then((res) => {
-        console.log(res);
+    let res = await axios.post("/entries/add", data)
+      .catch(e => {
+        alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message)
       });
+    console.log(res)
   };
+
+  const entryToggleHandler = (e) => {
+    console.log("handler!")
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -120,10 +123,10 @@ const DetailedEntry = ({ classes }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller
-            name="subcat"
+            name="isExpense"
             control={control}
             render={({ field }) => (
-              <FormControl component="fieldset">
+              <FormControl component="fieldset" onChange={entryToggleHandler}>
                 <RadioGroup aria-label="entryType" name="entryType1" {...field}>
                   <FormControlLabel value="expense" control={<Radio />} label="Expense" />
                   <FormControlLabel value="income" control={<Radio />} label="Income" />
@@ -139,7 +142,7 @@ const DetailedEntry = ({ classes }) => {
             variant="contained"
             color="primary"
           >
-            Add Expense
+            Add Transaction
           </Button>
           <Button
             className={classes.modalButton}

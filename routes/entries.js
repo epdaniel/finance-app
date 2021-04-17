@@ -4,15 +4,14 @@ const router = express.Router();
 
 // maybe use controllers like so:
 // const controllers = require('./../controllers/controllers');
-
 // router.get('/say-something', controllers.saySomething);
 
 router.get("/all", async (req, res) => {
   try {
     const entries = await Entry.find({ userId: req.headers.id });
-    res.json(entries);
-  } catch (err) {
-    res.json({ message: err });
+    res.status(200).send(entries);
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
@@ -31,10 +30,9 @@ router.post("/add", async (req, res) => {
 
   try {
     const newEntry = await entry.save();
-    res.json(newEntry);
-  } catch (err) {
-    console.log('error')
-    res.json({ message: err });
+    res.status(200).send(newEntry);
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
@@ -42,8 +40,8 @@ router.delete("/:entryId/delete", async (req, res) => {
   try {
     const removedEntry = await Entry.deleteOne({ _id: req.params.entryId });
     res.json(removedEntry);
-  } catch (err) {
-    res.json({ message: err });
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
@@ -66,8 +64,8 @@ router.patch("/:entryId/update ", async (req, res) => {
       }
     );
     res.json(updatedEntry);
-  } catch (err) {
-    res.json({ message: err });
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
