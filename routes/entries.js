@@ -11,13 +11,12 @@ router.get("/all", async (req, res) => {
     const entries = await Entry.find({ userId: req.headers.id });
     res.status(200).send(entries);
   } catch (error) {
+    console.log("Error getting all entries: " + error)
     res.status(400).send(error);
   }
 });
 
 router.post("/add", async (req, res) => {
-  console.log("got an add request!!!");
-  console.log(req.body);
   const entry = new Entry({
     userId: req.body.userId,
     timestamp: req.body.timestamp,
@@ -32,6 +31,7 @@ router.post("/add", async (req, res) => {
     const newEntry = await entry.save();
     res.status(200).send(newEntry);
   } catch (error) {
+    console.log("Error adding entry: " + error)
     res.status(400).send(error);
   }
 });

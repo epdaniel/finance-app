@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import UserProfile from "./userProfile";
 import { withStyles } from "@material-ui/core/styles";
 import { useForm, Controller } from "react-hook-form";
 import { Grid, TextField, Typography, Button, FormControl, RadioGroup, Radio, FormControlLabel } from "@material-ui/core";
@@ -19,25 +20,25 @@ const styles = {
 };
 
 const defaultValues = {
-  desc: "",
-  sum: "",
+  description: "",
+  amount: "",
   category: "",
-  subcat: "",
-  date: new Date(),
+  subCategory: "",
+  timestamp: new Date(),
   isExpense: "expense",
 };
 
 const DetailedEntry = ({ classes }) => {
   const { handleSubmit, reset, control } = useForm({ defaultValues });
   const onSubmit = async (data) => {
+    data['userId'] = UserProfile.getId();
     data['isExpense'] = data['isExpense'] === 'expense'
-    console.log(data);
-    //updated the entries (how to send alert to main app? - maybe take parameters in constructor?)
-    let res = await axios.post("/entries/add", data)
+    let res = await axios.post("/entries/add", data) //use res later to update list?
       .catch(e => {
         alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message)
       });
-    console.log(res)
+    alert('Added succesfully!')
+    reset()
   };
 
   const entryToggleHandler = (e) => {
@@ -59,7 +60,7 @@ const DetailedEntry = ({ classes }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller
-            name="desc"
+            name="description"
             control={control}
             render={({ field }) => (
               <TextField
@@ -71,7 +72,7 @@ const DetailedEntry = ({ classes }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller
-            name="sum"
+            name="amount"
             control={control}
             render={({ field }) => (
               <TextField
@@ -96,7 +97,7 @@ const DetailedEntry = ({ classes }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller
-            name="subcat"
+            name="subCategory"
             control={control}
             render={({ field }) => (
               <TextField
@@ -108,7 +109,7 @@ const DetailedEntry = ({ classes }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller
-            name="date"
+            name="timestamp"
             control={control}
             render={({ field: { onChange, value } }) => (
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
