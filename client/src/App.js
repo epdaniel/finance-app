@@ -1,53 +1,41 @@
-import React, { useState } from 'react';
-import './css/App.css';
-import axios from 'axios'
-import { DetailedEntry } from './components/DetailedEntry';
-import GoogleBtn from './components/GoogleBtn';
-import { Grid } from '@material-ui/core';
-import UserProfile from './components/userProfile';
-
+import React, { useState } from "react";
+import "./css/App.css";
+import Modal from "./components/Modal";
+import Header from "./components/Header";
+import UserProfile from "./components/userProfile";
+import EntryViewer from "./components/EntryViewer";
+import DetailedEntry from "./components/DetailedEntry";
 
 function App() {
   const [showEntryModal, setShowEntryModal] = useState(false);
+  const [showLogInError, setLogInError] = useState(false);
 
   const toggleEntryModal = () => {
-    setShowEntryModal(prev => !prev);
-  }
-
-  // function loadAllEntries() {
-  //   let id = UserProfile.getId();
-  //   if (id !== -1) {
-  //     axios.get('/entries/all', {
-  //       headers: {
-  //         id: 1  //change to UserProfile.getId();
-  //       }
-  //     }).then((res) => {
-  //       //update entries
-  //       //this.setState({ entries: res.data });
-  //     });
-  //   }
-  // }
-
-  //loadAllEntries();
+    if (UserProfile.isLoggedIn()) setShowEntryModal((prev) => !prev);
+    else {
+      setLogInError(true);
+    }
+  };
 
   return (
     <>
       <div className="App">
-        <br></br>
-        <GoogleBtn></GoogleBtn>
-        <h1>Finance App</h1>
-
-        <button className="addEntryButton" onClick={toggleEntryModal}>Add entry</button>
-        <DetailedEntry showModal={showEntryModal} setShowModal={toggleEntryModal} />
-
+        <Header logInCallback={() => setLogInError(false)} />
+        <button className="addEntryButton" onClick={toggleEntryModal}>
+          Add entry
+        </button>
+        {showLogInError && (
+          <p>
+            <br />
+            Please log in first!
+          </p>
+        )}
+        <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
+          <DetailedEntry />
+        </Modal>
         <h2>Transactions:</h2>
-        {/* {(!Array.isArray(this.state.entries) || this.state.entries.length === 0) ? <div>No Transactions yet.</div> :
-        this.state.entries.map((data, key) => {
-          return <Entry key={key} entry={data}></Entry>;
-        })
-      } */}
-
-      </div >
+        <EntryViewer />
+      </div>
     </>
   );
 }

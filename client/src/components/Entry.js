@@ -9,7 +9,7 @@ class Entry extends Component {
             description: props.entry.description,
             amount: props.entry.amount,
             category: props.entry.category,
-            subCategory: props.entry.subCatergory,
+            subCategory: props.entry.subCategory,
             date: props.entry.timestamp,
         };
     }
