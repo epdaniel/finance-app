@@ -1,28 +1,31 @@
-import React, { Component } from "react";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import React, { useState } from "react";
 import UserProfile from "./userProfile";
+import { withStyles } from "@material-ui/core/styles";
+import { Grid } from "@material-ui/core";
+import { GoogleLogin, GoogleLogout } from "react-google-login";
 
-// TODOO: REMOVE THIS TO ENV FILE??
+
 const CLIENT_ID =
   "232952519661-430s05vr9he9sf0o45b88nde6jid56vg.apps.googleusercontent.com";
 
-class GoogleBtn extends Component {
-  constructor(props) {
-    super(props);
+const styles = {
+  GoogleContainer: {
+    // width: "100%",
+    margin: 0,
+  },
+  UserImage: {
+    width: "30px",
+    marginRight: "-2px",
+    marginBottom: "-5px",
+    borderRadius: "50%",
+  },
+};
 
-    this.state = {
-      isLoggedIn: UserProfile.tryRememberLogin(),
-      logInCallback: props.logInCallback,
-      //accessToken: '' //TODO: what's this? think it's an access token to identify the user to google's services
-    };
+const GoogleBtn = ({ classes, logInCallback }) => {
+  const [isLoggedIn, setisLoggedIn] = useState(UserProfile.tryRememberLogin())
+  //accessToken: '' //TODO: what's this? think it's an access token to identify the user to google's services
 
-    this.login = this.login.bind(this);
-    this.handleLoginFailure = this.handleLoginFailure.bind(this);
-    this.logout = this.logout.bind(this);
-    this.handleLogoutFailure = this.handleLogoutFailure.bind(this);
-  }
-
-  login(response) {
+  const login = (response) => {
     let profile = response.getBasicProfile();
     UserProfile.login(
       response.getAuthResponse().id_token,
@@ -32,71 +35,68 @@ class GoogleBtn extends Component {
     //console.log('Log in from: ' + response.getAuthResponse().id_token);
     //console.log('Name: ' + profile.getName());
     if (response.accessToken) {
-      this.setState((state) => ({
-        ...this.state,
-        isLoggedIn: true,
-        //accessToken: response.accessToken
-      }));
-      this.state.logInCallback();
+      setisLoggedIn(true);
+      logInCallback();
     }
   }
 
-  logout(response) {
+  const logout = (response) => {
     UserProfile.logOut();
-    this.setState((state) => ({
-      ...this.state,
-      isLoggedIn: false,
-      //accessToken: ''
-    }));
+    setisLoggedIn(false);
   }
 
-  handleLoginFailure(response) {
+  const handleLoginFailure = (response) => {
     alert("Failed to log in");
   }
 
-  handleLogoutFailure(response) {
+  const handleLogoutFailure = (response) => {
     alert("Failed to log out");
   }
 
-  render() {
-    return (
-      <div>
-        {this.state.isLoggedIn ? (
-          <div>
+
+  return (
+    <Grid
+      container
+      className={classes.GoogleContainer}
+      direction="row"
+      spacing={1}
+      justify="center"
+      alignItems="center"
+    >
+      {isLoggedIn ? (
+        <>
+          <Grid item>
             <img
-              style={userGoogleImgStyle}
+              className={classes.UserImage}
               src={UserProfile.getImgUrl()}
-              alt="User"
-            ></img>
+              alt="Google User"
+            />
+          </Grid>
+          <Grid item>
             <b> {UserProfile.getName()} </b>
-            <br></br>
-            <br></br>
+          </Grid>
+          <Grid item>
             <GoogleLogout
               clientId={CLIENT_ID}
               buttonText="Sign out"
-              onLogoutSuccess={this.logout}
-              onFailure={this.handleLogoutFailure}
-            ></GoogleLogout>
-          </div>
-        ) : (
+              onLogoutSuccess={logout}
+              onFailure={handleLogoutFailure}
+            />
+          </Grid>
+        </>) :
+        (<Grid item>
           <GoogleLogin
             clientId={CLIENT_ID}
             buttonText="Sign in"
-            onSuccess={this.login}
-            onFailure={this.handleLoginFailure}
+            onSuccess={login}
+            onFailure={handleLoginFailure}
             cookiePolicy={"single_host_origin"}
             responseType="code,token"
           />
-        )}
-      </div>
-    );
-  }
+        </Grid>)}
+    </Grid>
+  );
+
 }
 
-const userGoogleImgStyle = {
-  width: "30px",
-  marginBottom: "-10px",
-  borderRadius: "50%",
-};
-
-export default GoogleBtn;
+export default withStyles(styles)(GoogleBtn);

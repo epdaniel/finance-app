@@ -5,6 +5,7 @@ import Modal from "./components/Modal";
 import GoogleBtn from "./components/GoogleBtn";
 import UserProfile from "./components/userProfile";
 import DetailedEntry from "./components/DetailedEntry";
+import Header from "./components/Header";
 
 function App() {
   const [showEntryModal, setShowEntryModal] = useState(false);
@@ -36,10 +37,7 @@ function App() {
   return (
     <>
       <div className="App">
-        <br></br>
-        <GoogleBtn logInCallback={() => setLogInError(false)}></GoogleBtn>
-        <h1>Finance App</h1>
-
+        <Header logInCallback={() => setLogInError(false)} />
         <button className="addEntryButton" onClick={toggleEntryModal}>
           Add entry
         </button>
@@ -49,7 +47,6 @@ function App() {
             Please log in first!
           </p>
         )}
-        {/* <DetailedEntry showModal={showEntryModal} setShowModal={toggleEntryModal} /> */}
         <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
           <DetailedEntry />
         </Modal>

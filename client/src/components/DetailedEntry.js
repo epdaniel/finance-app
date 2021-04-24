@@ -33,7 +33,8 @@ const DetailedEntry = ({ classes }) => {
   const onSubmit = async (data) => {
     data['userId'] = UserProfile.getId();
     data['isExpense'] = data['isExpense'] === 'expense'
-    let res = await axios.post("/entries/add", data) //use res later to update list?
+    //let res = 
+    await axios.post("/entries/add", data) //use res later to update list?
       .catch(e => {
         alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message)
       });
