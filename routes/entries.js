@@ -1,14 +1,29 @@
 const Entry = require("../models/Entry");
+const { OAuth2Client } = require('google-auth-library');
 const express = require("express");
 const router = express.Router();
+require('dotenv/config');
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // maybe use controllers like so:
 // const controllers = require('./../controllers/controllers');
 // router.get('/say-something', controllers.saySomething);
 
+async function verifyGoogleAccount(token) {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+  const payload = ticket.getPayload();
+  const userid = payload['sub'];
+  return userid;
+}
+
 router.get("/all", async (req, res) => {
   try {
-    const entries = await Entry.find({ userId: req.headers.id });
+    let userId = await verifyGoogleAccount(req.headers.id_token);
+    const entries = await Entry.find({ userId: userId });
     res.status(200).send(entries);
   } catch (error) {
     console.log("Error getting all entries: " + error)
@@ -17,8 +32,9 @@ router.get("/all", async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
+  let userId = await verifyGoogleAccount(req.body.id_token);
   const entry = new Entry({
-    userId: req.body.userId,
+    userId: userId,
     timestamp: req.body.timestamp,
     amount: req.body.amount,
     description: req.body.description,
@@ -26,7 +42,6 @@ router.post("/add", async (req, res) => {
     subCategory: req.body.subCategory,
     isExpnse: req.body.isExpnse,
   });
-
   try {
     const newEntry = await entry.save();
     res.status(200).send(newEntry);
