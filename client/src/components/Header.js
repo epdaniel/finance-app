@@ -9,12 +9,15 @@ const styles = {
         margin: 0,
         padding: 6,
         marginBottom: 10,
-        backgroundColor: 'salmon',
+        backgroundColor: '#00adb5',
     },
     modalButton: {
         marginLeft: "10px",
         marginRight: "10px",
     },
+    header: {
+        color: '#eeeeee'
+    }
 };
 
 const Header = ({ classes, logInCallback }) => {
@@ -27,7 +30,7 @@ const Header = ({ classes, logInCallback }) => {
             alignItems="center"
         >
             <Grid item>
-                <Typography variant="h4">Finance App</Typography>
+                <Typography variant="h4" className={classes.header}>Finance App</Typography>
             </Grid>
             <Grid item>
                 <GoogleBtn logInCallback={logInCallback}></GoogleBtn>

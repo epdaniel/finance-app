@@ -6,17 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
 
 const styles = {
-    HeaderContainer: {
-        width: "100%",
-        margin: 0,
-        padding: 6,
-        marginBottom: 10,
-        backgroundColor: 'salmon',
-    },
-    modalButton: {
-        marginLeft: "10px",
-        marginRight: "10px",
-    },
+
 };
 
 const EntryViewer = ({ classes }) => {
