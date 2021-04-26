@@ -20,7 +20,7 @@ const styles = {
     }
 };
 
-const Header = ({ classes, logInCallback }) => {
+const Header = ({ classes }) => {
     return (
         <Grid
             container
@@ -33,7 +33,7 @@ const Header = ({ classes, logInCallback }) => {
                 <Typography variant="h4" className={classes.header}>Finance App</Typography>
             </Grid>
             <Grid item>
-                <GoogleBtn logInCallback={logInCallback}></GoogleBtn>
+                <GoogleBtn></GoogleBtn>
             </Grid>
         </Grid>
     )

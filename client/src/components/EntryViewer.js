@@ -9,14 +9,14 @@ const styles = {
 
 };
 
-const EntryViewer = ({ classes }) => {
+const EntryViewer = ({ classes, isLoggedIn }) => {
     const [entries, setEntries] = useState([])
 
     useEffect(() => {
         console.log("Loading entries!")
         loadAllEntries();
     }, []);
-
+    console.log("loggg" + isLoggedIn)
     const loadAllEntries = async () => {
         if (UserProfile.isLoggedIn()) {
             axios.get("/entries/all", {
@@ -39,6 +39,7 @@ const EntryViewer = ({ classes }) => {
 
     return (
         <div>
+            {isLoggedIn && <b>logged</b>}
             {(!Array.isArray(entries) || entries.length === 0) ? <div>No Transactions yet.</div> :
                 entries.map((data, key) => {
                     return <Entry key={key} entry={data}></Entry>;

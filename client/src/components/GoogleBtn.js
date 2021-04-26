@@ -36,13 +36,15 @@ const GoogleBtn = ({ classes, logInCallback }) => {
     //console.log('Name: ' + profile.getName());
     if (response.accessToken) {
       setisLoggedIn(true);
-      logInCallback();
+      // logInCallback();
+      window.location.reload();
     }
   }
 
   const logout = (response) => {
     UserProfile.logOut();
     setisLoggedIn(false);
+    window.location.reload();
   }
 
   const handleLoginFailure = (response) => {

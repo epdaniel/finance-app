@@ -20,7 +20,7 @@ function App() {
   return (
     <>
       <div className="App">
-        <Header logInCallback={() => setLogInError(false)} />
+        <Header/>
         <button className="addEntryButton" onClick={toggleEntryModal}>
           Add entry
         </button>
@@ -34,7 +34,7 @@ function App() {
           <DetailedEntry />
         </Modal>
         <h2>Transactions:</h2>
-        <EntryViewer />
+        <EntryViewer isLoggedIn={UserProfile.isLoggedIn()}/>
       </div>
     </>
   );
