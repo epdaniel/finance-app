@@ -26,12 +26,11 @@ function App() {
         </button>
         {showLogInError && (
           <p>
-            <br />
             Please log in first!
           </p>
         )}
         <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
-          <DetailedEntry />
+          <DetailedEntry setShowModal={toggleEntryModal}/>
         </Modal>
         <h2>Transactions:</h2>
         <EntryViewer isLoggedIn={UserProfile.isLoggedIn()}/>

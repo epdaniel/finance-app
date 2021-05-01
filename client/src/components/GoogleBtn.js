@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import UserProfile from "./userProfile";
-import { withStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 
 
@@ -10,20 +10,22 @@ const CLIENT_ID =
 
 const styles = {
   GoogleContainer: {
-    // width: "100%",
     margin: 0,
+    marginRight: 4,
   },
   UserImage: {
-    width: "30px",
-    marginRight: "-2px",
+    width: "28px",
     marginBottom: "-5px",
     borderRadius: "50%",
   },
+  googleName: {
+    color: "#3c4043",
+    fontSize: "14px",  
+  }
 };
 
-const GoogleBtn = ({ classes, logInCallback }) => {
+const GoogleBtn = ({ classes }) => {
   const [isLoggedIn, setisLoggedIn] = useState(UserProfile.tryRememberLogin())
-  //accessToken: '' //TODO: what's this? think it's an access token to identify the user to google's services
 
   const login = (response) => {
     let profile = response.getBasicProfile();
@@ -32,11 +34,8 @@ const GoogleBtn = ({ classes, logInCallback }) => {
       profile.getName(),
       profile.getImageUrl()
     );
-    //console.log('Log in from: ' + response.getAuthResponse().id_token);
-    //console.log('Name: ' + profile.getName());
     if (response.accessToken) {
       setisLoggedIn(true);
-      // logInCallback();
       window.location.reload();
     }
   }
@@ -48,13 +47,12 @@ const GoogleBtn = ({ classes, logInCallback }) => {
   }
 
   const handleLoginFailure = (response) => {
-    alert("Failed to log in");
+    alert("Failed to log in, try again later");
   }
 
   const handleLogoutFailure = (response) => {
     alert("Failed to log out");
   }
-
 
   return (
     <Grid
@@ -74,8 +72,8 @@ const GoogleBtn = ({ classes, logInCallback }) => {
               alt="Google User"
             />
           </Grid>
-          <Grid item>
-            <b> {UserProfile.getName()} </b>
+          <Grid item className={classes.googleName}>
+              {UserProfile.getName()}
           </Grid>
           <Grid item>
             <GoogleLogout
@@ -98,7 +96,6 @@ const GoogleBtn = ({ classes, logInCallback }) => {
         </Grid>)}
     </Grid>
   );
-
 }
 
 export default withStyles(styles)(GoogleBtn);
