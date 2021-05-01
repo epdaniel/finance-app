@@ -28,7 +28,7 @@ const defaultValues = {
   isExpense: "expense",
 };
 
-const DetailedEntry = ({ classes }) => {
+const DetailedEntry = ({ classes, toggleModal }) => {
   const { handleSubmit, reset, control } = useForm({ defaultValues });
   const onSubmit = async (data) => {
     data['id_token'] = UserProfile.getId();
@@ -39,12 +39,13 @@ const DetailedEntry = ({ classes }) => {
         alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message)
         return
       });
-    alert('Added succesfully!')
-    reset()
+    reset();
+    toggleModal();
+    window.location.reload();
   };
 
   const entryToggleHandler = (e) => {
-    console.log("handler!")
+    console.log("handler!");
   }
 
   return (

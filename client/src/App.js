@@ -20,7 +20,7 @@ function App() {
   return (
     <>
       <div className="App">
-        <Header/>
+        <Header />
         <button className="addEntryButton" onClick={toggleEntryModal}>
           Add entry
         </button>
@@ -30,10 +30,10 @@ function App() {
           </p>
         )}
         <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
-          <DetailedEntry setShowModal={toggleEntryModal}/>
+          <DetailedEntry toggleModal={toggleEntryModal} />
         </Modal>
         <h2>Transactions:</h2>
-        <EntryViewer isLoggedIn={UserProfile.isLoggedIn()}/>
+        <EntryViewer />
       </div>
     </>
   );

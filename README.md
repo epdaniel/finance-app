@@ -5,8 +5,7 @@ A simple finance app to keep track of your funds.
 Deployed in herokuapp: https://dans-finance.herokuapp.com/
 
 TODO:
- - Lift state of User Logged-in to app
- - UserProfile is probably useless, move info to app / googlebtn
+ - check token on front, (on try remember login ) 
  - make sure date flows between log in button (state) and list of entries
  - make the timezone format better
  - stylize the entry 

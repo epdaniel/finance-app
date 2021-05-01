@@ -23,7 +23,7 @@ async function verifyGoogleAccount(token) {
 router.get("/all", async (req, res) => {
   try {
     let userId = await verifyGoogleAccount(req.headers.id_token);
-    const entries = await Entry.find({ userId: userId });
+    const entries = await Entry.find({ userId: userId }).sort({ timestamp: -1 });
     res.status(200).send(entries);
   } catch (error) {
     console.log("Error getting all entries: " + error)
