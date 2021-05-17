@@ -1,4 +1,4 @@
-import '../css/Entry.css';
+import "../css/Entry.css";
 const { Component } = require("react");
 
 class Entry extends Component {
@@ -15,17 +15,19 @@ class Entry extends Component {
     }
 
     render() {
-        return <div className="Entry">
-            <b className="EntryDesc">{this.state.description} </b>
-            <label>Amount:</label>
-            <b>{this.state.amount} </b>
-            <label>Category:</label>
-            <b>{this.state.category} </b>
-            <label>Sub-category:</label>
-            <b>{this.state.subCategory} </b>
-            <label>Date:</label>
-            <b>{this.state.date} </b>
-        </div>;
+        return (
+            <div className="Entry">
+                <b className="EntryDesc">{this.state.description} </b>
+                <label>Amount:</label>
+                <b>{this.state.amount} </b>
+                <label>Category:</label>
+                <b>{this.state.category} </b>
+                <label>Sub-category:</label>
+                <b>{this.state.subCategory} </b>
+                <label>Date:</label>
+                <b>{this.state.date} </b>
+            </div>
+        );
     }
 }
 
