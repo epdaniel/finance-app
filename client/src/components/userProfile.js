@@ -49,21 +49,23 @@ let UserProfile = (function () {
 
     let tryRememberLogin = async function () {
         let verifyTokenId = async (tokenId) => {
-            const client = new OAuth2Client(getGoogleClientId());
-            const ticket = await client.verifyIdToken({
-                idToken: tokenId,
-                audience: getGoogleClientId(),
-            });
-            const payload = ticket.getPayload();
-            const userid = payload["sub"];
-            return userid;
+            try {
+                const client = new OAuth2Client(getGoogleClientId());
+                const ticket = await client.verifyIdToken({
+                    idToken: tokenId,
+                    audience: getGoogleClientId(),
+                });
+                const payload = ticket.getPayload();
+                const userid = payload["sub"];
+                return userid;
+            } catch (e) {
+                return -1;
+            }
         };
-        console.log("trying");
+
         if (localStorage.getItem("ID") !== null) {
-            let z =
-                "eyJhbGciOiJSUzI1NiIsImtpZCI6ImQzZmZiYjhhZGUwMWJiNGZhMmYyNWNmYjEwOGNjZWI4ODM0MDZkYWMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMjMyOTUyNTE5NjYxLTQzMHMwNXZyOWhlOXNmMG80NWI4OG5kZTZqaWQ1NnZnLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMjMyOTUyNTE5NjYxLTQzMHMwNXZyOWhlOXNmMG80NWI4OG5kZTZqaWQ1NnZnLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA0MTk5MzE1NzIzMjIyMjc1NjExIiwiZW1haWwiOiJpZGFuaWVsem9yQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiQ2VyWU5zWVBqVGpVaTVsdG1oMWczdyIsIm5hbWUiOiJEYW5pZWwgRXBzaHRlaW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2pSS3d1ZkNWSXNPSlU2TVZGR0lXYkpkSEJLa3dPblN1Y3Q4UEJLUk9vPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkRhbmllbCIsImZhbWlseV9uYW1lIjoiRXBzaHRlaW4iLCJsb2NhbGUiOiJlbiIsImlhdCI6MTYyMTI4OTAyNCwiZXhwIjoxNjIxMjkyNjI0LCJqdGkiOiI4MGEzNjM5ZDk4NmZiOTMwOTkwODM4OTFlM2ZkMWQ5N2M1MmFjYTgxIn0.jkclAbKWs2rPgUEiIc6Z5fz5WT33MbO40NvIolVevnmTPbx63BtAoA6eeUIu0XdAO-AQVcf2KIwlIbs-prs3TRwaeqPdB2msTT0xwjfZWCSdAnY31Ds1-MEUgMa-EliZ8VUX4L9tebwlVIqxjpJx5SYEgCXU9K09kS1tQFTMw_SKKnmMhnVNvG1gfsVpsAGEvwKCcQ1o27UpZIOOEXKX0QeWs-WWU3DLi21tR-yCMy5OSwrFeB67azdz05wICYo9OkWwM0t0kj_v5NsUBPQKL5bwez3xoUTz9_kiT1_KdLtR2CfowL3tjcs0ML28_4YQXLZGWsGZsL_3-avzqBv67A";
-            let userId = await verifyTokenId(z);
-            console.log(userId);
+            // let userId = await verifyTokenId(localStorage.getItem("ID"));
+            // if (userId === -1) return false;
             this.login(
                 localStorage.getItem("ID"),
                 localStorage.getItem("fullName"),

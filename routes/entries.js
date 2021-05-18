@@ -21,6 +21,7 @@ async function verifyGoogleAccount(token) {
 }
 
 router.get("/all", async (req, res) => {
+    console.log("got all");
     try {
         let userId = await verifyGoogleAccount(req.headers.id_token);
         const entries = await Entry.find({ userId: userId }).sort({

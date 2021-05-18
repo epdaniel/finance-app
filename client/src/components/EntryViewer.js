@@ -16,6 +16,7 @@ const EntryViewer = ({ classes }) => {
     }, []);
 
     const loadAllEntries = async () => {
+        console.log("log: " + UserProfile.isLoggedIn());
         if (UserProfile.isLoggedIn()) {
             axios
                 .get("/entries/all", {
