@@ -1,7 +1,7 @@
 import React from 'react'
 import GoogleBtn from "./GoogleBtn";
 import { withStyles } from "@material-ui/core/styles";
-import { Grid, TextField, Typography, Button, FormControl, RadioGroup, Radio, FormControlLabel } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 
 const styles = {
     container: {
@@ -9,7 +9,7 @@ const styles = {
         height: '100vh',
         margin: '0px',
         backgroundColor: "#37474F",
-        paddingTop: '5%',
+        paddingTop: '6%',
     },
     subtitle: {
         color: "#CFD8DC",
