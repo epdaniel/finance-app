@@ -31,7 +31,7 @@ const defaultValues = {
 const DetailedEntry = ({ classes, toggleModal }) => {
   const { handleSubmit, reset, control } = useForm({ defaultValues });
   const onSubmit = async (data) => {
-    data['id_token'] = UserProfile.getId();
+    data['id_token'] = UserProfile.getToken();
     data['isExpense'] = data['isExpense'] === 'expense'
     //let res = 
     await axios.post("/entries/add", data) //use res later to update list?

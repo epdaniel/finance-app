@@ -1,25 +1,24 @@
-let UserProfile = (function () {
+const UserProfile = (function () {
   let full_name = "";
-  let id = -1;
+  let token_id = -1;
   let img_url = ""
   let m_isLoggedIn = false;
 
   let getName = function () {
-    return full_name;    // Or pull this from cookie/localStorage
+    return full_name;
   };
 
   let setName = function (name) {
     full_name = name;
-    localStorage.setItem('fullName', name);
   };
 
-  let getId = function () {
-    return id;
+  let getToken = function () {
+    return token_id;
   };
 
-  let setId = function (newId) {
-    id = newId;
-    localStorage.setItem('ID', newId);
+  let setToken = function (newToken) {
+    token_id = newToken;
+
   };
 
   let getImgUrl = function () {
@@ -28,22 +27,24 @@ let UserProfile = (function () {
 
   let setImgUrl = function (url) {
     img_url = url;
-    localStorage.setItem('userIMG', url);
   };
 
   let logOut = function () {
-    this.setId(null);
+    this.setToken(null);
     this.setName("");
     this.setImgUrl("");
     this.setLoggedIn(false);
     localStorage.clear();
   }
 
-  let login = function (id, name, url) {
-    this.setId(id);
+  let login = function (token, name, url) {
+    this.setToken(token);
     this.setName(name);
     this.setImgUrl(url);
     this.setLoggedIn(true);
+    localStorage.setItem('TokenId', token);
+    localStorage.setItem('fullName', name);
+    localStorage.setItem('userIMG', url);
   }
 
   let isLoggedIn = function () {
@@ -55,8 +56,8 @@ let UserProfile = (function () {
   }
 
   let tryRememberLogin = function () {
-    if (localStorage.getItem('ID') !== null) {
-      this.login(localStorage.getItem('ID'), localStorage.getItem('fullName'), localStorage.getItem('userIMG'));
+    if (localStorage.getItem('TokenId') !== null) {
+      this.login(localStorage.getItem('TokenId'), localStorage.getItem('fullName'), localStorage.getItem('userIMG'));
       return true;
     }
     return false;
@@ -65,8 +66,8 @@ let UserProfile = (function () {
   return {
     getName: getName,
     setName: setName,
-    getId: getId,
-    setId: setId,
+    getToken: getToken,
+    setToken: setToken,
     getImgUrl: getImgUrl,
     setImgUrl: setImgUrl,
     logOut: logOut,

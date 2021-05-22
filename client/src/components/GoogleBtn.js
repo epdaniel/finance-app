@@ -87,11 +87,11 @@ const GoogleBtn = ({ classes }) => {
         (<Grid item>
           <GoogleLogin
             clientId={CLIENT_ID}
-            buttonText="Sign in"
             onSuccess={login}
             onFailure={handleLoginFailure}
             cookiePolicy={"single_host_origin"}
             responseType="code,token"
+            isSignedIn={true}
           />
         </Grid>)}
     </Grid>

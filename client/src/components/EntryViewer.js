@@ -21,7 +21,7 @@ const EntryViewer = ({ classes }) => {
         if (UserProfile.isLoggedIn()) {
             axios.get("/entries/all", {
                 headers: {
-                    id_token: UserProfile.getId(),
+                    id_token: UserProfile.getToken(),
                 }
             }).then(res => {
                 console.log(res)

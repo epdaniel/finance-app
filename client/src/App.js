@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import UserProfile from "./components/userProfile";
 import EntryViewer from "./components/EntryViewer";
 import DetailedEntry from "./components/DetailedEntry";
+import LogIn from "./components/LogIn"
 
 function App() {
   const [showEntryModal, setShowEntryModal] = useState(false);
@@ -20,7 +21,8 @@ function App() {
   return (
     <>
       <div className="App">
-        <Header />
+        <LogIn/>
+        {/* <Header />
         <button className="addEntryButton" onClick={toggleEntryModal}>
           Add entry
         </button>
@@ -33,7 +35,7 @@ function App() {
           <DetailedEntry toggleModal={toggleEntryModal} />
         </Modal>
         <h2>Transactions:</h2>
-        <EntryViewer />
+        <EntryViewer /> */}
       </div>
     </>
   );
