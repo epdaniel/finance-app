@@ -25,7 +25,7 @@ const styles = {
 };
 
 const GoogleBtn = ({ classes }) => {
-  const [isLoggedIn, setisLoggedIn] = useState(UserProfile.tryRememberLogin())
+  const [isLoggedIn, setisLoggedIn] = useState(UserProfile.attemptLogin())
 
   const login = (response) => {
     let profile = response.getBasicProfile();

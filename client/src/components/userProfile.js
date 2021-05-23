@@ -4,60 +4,37 @@ const UserProfile = (function () {
   let img_url = ""
   let m_isLoggedIn = false;
 
-  let getName = function () {
-    return full_name;
-  };
+  const getToken = () => token_id;
+  const getName = () => full_name;
+  const getImgUrl = () => img_url;
+  const isLoggedIn = () => m_isLoggedIn;
 
-  let setName = function (name) {
-    full_name = name;
-  };
+  const setToken = (newToken) => { token_id = newToken; };
+  const setName = (name) => { full_name = name; };
+  const setImgUrl = (url) => { img_url = url; };
+  const setLoggedIn = (status) => { m_isLoggedIn = status; };
 
-  let getToken = function () {
-    return token_id;
-  };
-
-  let setToken = function (newToken) {
-    token_id = newToken;
-
-  };
-
-  let getImgUrl = function () {
-    return img_url;
-  };
-
-  let setImgUrl = function (url) {
-    img_url = url;
-  };
-
-  let logOut = function () {
-    this.setToken(null);
-    this.setName("");
-    this.setImgUrl("");
-    this.setLoggedIn(false);
-    localStorage.clear();
-  }
-
-  let login = function (token, name, url) {
-    this.setToken(token);
-    this.setName(name);
-    this.setImgUrl(url);
-    this.setLoggedIn(true);
+  const login = (token, name, url) => {
+    setToken(token);
+    setName(name);
+    setImgUrl(url);
+    setLoggedIn(true);
     localStorage.setItem('TokenId', token);
     localStorage.setItem('fullName', name);
     localStorage.setItem('userIMG', url);
   }
 
-  let isLoggedIn = function () {
-    return m_isLoggedIn;
+  const logOut = () => {
+    setToken(null);
+    setName("");
+    setImgUrl("");
+    setLoggedIn(false);
+    localStorage.clear();
   }
 
-  let setLoggedIn = function (status) {
-    m_isLoggedIn = status;
-  }
-
-  let tryRememberLogin = function () {
+  const attemptLogin = () => {
     if (localStorage.getItem('TokenId') !== null) {
-      this.login(localStorage.getItem('TokenId'), localStorage.getItem('fullName'), localStorage.getItem('userIMG'));
+      login(localStorage.getItem('TokenId'), localStorage.getItem('fullName'), localStorage.getItem('userIMG'));
       return true;
     }
     return false;
@@ -74,10 +51,8 @@ const UserProfile = (function () {
     isLoggedIn: isLoggedIn,
     setLoggedIn: setLoggedIn,
     login: login,
-    tryRememberLogin: tryRememberLogin,
+    attemptLogin: attemptLogin,
   }
-
 })();
-
 
 export default UserProfile;
