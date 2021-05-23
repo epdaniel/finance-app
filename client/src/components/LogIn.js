@@ -28,7 +28,7 @@ const LogIn = ({ classes }) => {
     return (
         <Grid container spacing={1} className={classes.container} direction="column" alignItems="center">
            <Grid item>
-                <img width="120" src="moneyicon.svg"></img>   
+                <img src="moneyicon.svg"  width="120" alt="logo"/>
             </Grid> 
             <Grid item>
                 <Typography variant="h2" className={classes.title}>FinanceApp</Typography>
