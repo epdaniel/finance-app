@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import UserProfile from "./userProfile";
+import { useAuth } from "./useAuth";
 import { withStyles } from "@material-ui/core/styles";
 import { useForm, Controller } from "react-hook-form";
 import { Grid, TextField, Typography, Button, FormControl, RadioGroup, Radio, FormControlLabel } from "@material-ui/core";
@@ -29,9 +29,10 @@ const defaultValues = {
 };
 
 const DetailedEntry = ({ classes, toggleModal }) => {
+  const auth = useAuth();
   const { handleSubmit, reset, control } = useForm({ defaultValues });
   const onSubmit = async (data) => {
-    data['id_token'] = UserProfile.getToken();
+    data['id_token'] = auth.idToken;
     data['isExpense'] = data['isExpense'] === 'expense'
     //let res = 
     await axios.post("/entries/add", data) //use res later to update list?

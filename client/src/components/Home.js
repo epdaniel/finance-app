@@ -1,7 +1,7 @@
 import React , { useState } from 'react'
 import Modal from "./Modal";
 import Header from "./Header";
-import UserProfile from "./userProfile";
+import { useAuth } from "./useAuth";
 import EntryViewer from "./EntryViewer";
 import DetailedEntry from "./DetailedEntry";
 import { withStyles } from "@material-ui/core/styles";
@@ -12,11 +12,12 @@ const styles = {
   };
 
 const Home = () => {
+    const auth = useAuth();
     const [showEntryModal, setShowEntryModal] = useState(false);
     const [showLogInError, setLogInError] = useState(false);
   
     const toggleEntryModal = () => {
-      if (UserProfile.isLoggedIn()) setShowEntryModal((prev) => !prev);
+      if (auth.loggedIn) setShowEntryModal((prev) => !prev);
       else {
         setLogInError(true);
       }

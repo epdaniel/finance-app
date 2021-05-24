@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import UserProfile from "./userProfile";
+import React from "react";
+import { useAuth } from "./useAuth";
 import { Grid } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
@@ -25,33 +25,26 @@ const styles = {
 };
 
 const GoogleBtn = ({ classes }) => {
-  const [isLoggedIn, setisLoggedIn] = useState(UserProfile.attemptLogin())
+  const auth = useAuth();
 
   const login = (response) => {
     let profile = response.getBasicProfile();
-    UserProfile.login(
-      response.getAuthResponse().id_token,
-      profile.getName(),
-      profile.getImageUrl()
-    );
+
     if (response.accessToken) {
-      setisLoggedIn(true);
-      window.location.reload();
+        auth.login(
+            response.getAuthResponse().id_token,
+            profile.getName(),
+            profile.getImageUrl()
+        )
     }
   }
 
   const logout = (response) => {
-    UserProfile.logOut();
-    setisLoggedIn(false);
-    window.location.reload();
+    auth.logout();
   }
 
   const handleLoginFailure = (response) => {
     alert("Failed to log in, try again later");
-  }
-
-  const handleLogoutFailure = (response) => {
-    alert("Failed to log out");
   }
 
   return (
@@ -63,24 +56,23 @@ const GoogleBtn = ({ classes }) => {
       justify="center"
       alignItems="center"
     >
-      {isLoggedIn ? (
+      {auth.loggedIn ? (
         <>
           <Grid item>
             <img
               className={classes.UserImage}
-              src={UserProfile.getImgUrl()}
+              src={auth.imgUrl}
               alt="Google User"
             />
           </Grid>
           <Grid item className={classes.googleName}>
-              {UserProfile.getName()}
+              {auth.userName}
           </Grid>
           <Grid item>
             <GoogleLogout
               clientId={CLIENT_ID}
               buttonText="Sign out"
               onLogoutSuccess={logout}
-              onFailure={handleLogoutFailure}
             />
           </Grid>
         </>) :
