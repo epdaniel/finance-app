@@ -4,6 +4,8 @@ import { Grid } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 
+const CLIENT_ID =
+    "232952519661-430s05vr9he9sf0o45b88nde6jid56vg.apps.googleusercontent.com";
 const styles = {
     GoogleContainer: {
         margin: 0,
@@ -39,10 +41,8 @@ const GoogleBtn = ({ classes }) => {
         auth.logout();
     };
 
-    const logout = (response) => {
-        UserProfile.logOut();
-        setisLoggedIn(false);
-        window.location.reload();
+    const handleLoginFailure = (response) => {
+        alert("Failed to log in, try again later");
     };
 
     return (
