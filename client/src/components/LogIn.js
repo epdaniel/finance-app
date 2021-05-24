@@ -1,15 +1,15 @@
-import React from 'react'
+import React from "react";
 import GoogleBtn from "./GoogleBtn";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
 
 const styles = {
     container: {
-        width: '100vw',
-        height: '100vh',
-        margin: '0px',
+        width: "100vw",
+        height: "100vh",
+        margin: "0px",
         backgroundColor: "#37474F",
-        paddingTop: '6%',
+        paddingTop: "6%",
     },
     subtitle: {
         color: "#CFD8DC",
@@ -18,29 +18,38 @@ const styles = {
         color: "#ffffff",
         fontFamily: "'Playfair Display', serif",
     },
-    buttonGrid:{
-        marginTop: '40px',
-    }
-  };
+    buttonGrid: {
+        marginTop: "40px",
+    },
+};
 
-  
 const LogIn = ({ classes }) => {
     return (
-        <Grid container spacing={1} className={classes.container} direction="column" alignItems="center">
-           <Grid item>
-                <img src="moneyicon.svg"  width="120" alt="logo"/>
-            </Grid> 
+        <Grid
+            container
+            spacing={1}
+            className={classes.container}
+            direction="column"
+            alignItems="center"
+        >
             <Grid item>
-                <Typography variant="h2" className={classes.title}>FinanceApp</Typography>
+                <img src="moneyicon.svg" width="120" alt="logo" />
             </Grid>
             <Grid item>
-                <Typography variant="h6" className={classes.subtitle}>A simple way to keep track of your funds</Typography>
+                <Typography variant="h2" className={classes.title}>
+                    FinanceApp
+                </Typography>
+            </Grid>
+            <Grid item>
+                <Typography variant="h6" className={classes.subtitle}>
+                    A simple way to keep track of your funds
+                </Typography>
             </Grid>
             <Grid item className={classes.buttonGrid}>
-                <GoogleBtn/>
+                <GoogleBtn />
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default withStyles(styles)(LogIn);
