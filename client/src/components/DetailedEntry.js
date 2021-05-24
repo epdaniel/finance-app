@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import UserProfile from "./userProfile";
+import { useAuth } from "./useAuth";
 import { withStyles } from "@material-ui/core/styles";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -38,17 +38,21 @@ const defaultValues = {
 };
 
 const DetailedEntry = ({ classes, toggleModal }) => {
+    const auth = useAuth();
     const { handleSubmit, reset, control } = useForm({ defaultValues });
     const onSubmit = async (data) => {
-        data["id_token"] = UserProfile.getId();
+        data["id_token"] = auth.idToken;
         data["isExpense"] = data["isExpense"] === "expense";
-        await axios.post("/entries/add", data).catch((e) => {
-            alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message);
-            return;
-        });
+        //let res =
+        await axios
+            .post("/entries/add", data) //use res later to update list?
+            .catch((e) => {
+                alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message);
+                return;
+            });
         reset();
         toggleModal();
-        window.location.reload();
+        window.location.reload(); // TODO: remove this embarrassment
     };
 
     const entryToggleHandler = (e) => {

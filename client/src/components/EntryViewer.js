@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import UserProfile from "./userProfile";
+import { useAuth } from "./useAuth";
 import Entry from "./Entry";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
@@ -8,20 +8,16 @@ import { Grid, Typography } from "@material-ui/core";
 const styles = {};
 
 const EntryViewer = ({ classes }) => {
+    const auth = useAuth();
     const [entries, setEntries] = useState([]);
 
     useEffect(() => {
         console.log("Loading entries!");
-        loadAllEntries();
-    }, []);
-
-    const loadAllEntries = async () => {
-        console.log("log: " + UserProfile.isLoggedIn());
-        if (UserProfile.isLoggedIn()) {
+        if (auth.loggedIn && auth.idToken) {
             axios
                 .get("/entries/all", {
                     headers: {
-                        id_token: UserProfile.getId(),
+                        id_token: auth.idToken,
                     },
                 })
                 .then((res) => {
@@ -36,7 +32,7 @@ const EntryViewer = ({ classes }) => {
         } else {
             setEntries([]);
         }
-    };
+    }, [auth]);
 
     return (
         <div>

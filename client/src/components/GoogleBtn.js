@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import UserProfile from "./userProfile";
+import React from "react";
+import { useAuth } from "./useAuth";
 import { Grid } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
@@ -21,41 +21,28 @@ const styles = {
 };
 
 const GoogleBtn = ({ classes }) => {
-    const [isLoggedIn, setisLoggedIn] = useState(false);
-
-    useEffect(() => {
-        let attemptLogin = async () => {
-            let status = await UserProfile.tryRememberLogin();
-            setisLoggedIn(status);
-        };
-        attemptLogin();
-    }, []);
+    const auth = useAuth();
 
     const login = (response) => {
         let profile = response.getBasicProfile();
-        UserProfile.login(
-            response.getAuthResponse().id_token,
-            profile.getName(),
-            profile.getImageUrl()
-        );
+
         if (response.accessToken) {
-            setisLoggedIn(true);
-            window.location.reload();
+            auth.login(
+                response.getAuthResponse().id_token,
+                profile.getName(),
+                profile.getImageUrl()
+            );
         }
+    };
+
+    const logout = (response) => {
+        auth.logout();
     };
 
     const logout = (response) => {
         UserProfile.logOut();
         setisLoggedIn(false);
         window.location.reload();
-    };
-
-    const handleLoginFailure = (response) => {
-        alert("Failed to log in, try again later");
-    };
-
-    const handleLogoutFailure = (response) => {
-        alert("Failed to log out");
     };
 
     return (
@@ -67,36 +54,35 @@ const GoogleBtn = ({ classes }) => {
             justify="center"
             alignItems="center"
         >
-            {isLoggedIn ? (
+            {auth.loggedIn ? (
                 <>
                     <Grid item>
                         <img
                             className={classes.UserImage}
-                            src={UserProfile.getImgUrl()}
+                            src={auth.imgUrl}
                             alt="Google User"
                         />
                     </Grid>
                     <Grid item className={classes.googleName}>
-                        {UserProfile.getName()}
+                        {auth.userName}
                     </Grid>
                     <Grid item>
                         <GoogleLogout
-                            clientId={UserProfile.getGoogleClientId()}
+                            clientId={CLIENT_ID}
                             buttonText="Sign out"
                             onLogoutSuccess={logout}
-                            onFailure={handleLogoutFailure}
                         />
                     </Grid>
                 </>
             ) : (
                 <Grid item>
                     <GoogleLogin
-                        clientId={UserProfile.getGoogleClientId()}
-                        buttonText="Sign in"
+                        clientId={CLIENT_ID}
                         onSuccess={login}
                         onFailure={handleLoginFailure}
                         cookiePolicy={"single_host_origin"}
                         responseType="code,token"
+                        isSignedIn={true}
                     />
                 </Grid>
             )}
