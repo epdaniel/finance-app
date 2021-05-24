@@ -7,6 +7,7 @@ Deployed in herokuapp: https://dans-finance.herokuapp.com/
 
 TODO:
 
+-   send token in auth header as Bearer token
 -   make the timezone format better
 -   stylize the entry
 -   filter entries?
