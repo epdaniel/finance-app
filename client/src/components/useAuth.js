@@ -11,25 +11,23 @@ export const ProvideAuth = ({ children }) => {
 
 const useProvideAuth = () => {
     const [loggedIn, setLoggedIn] = useState(false);
-    const [idToken, setIdToken] = useState(null)
-    const [username, setUsername] = useState('')
-    const [imgUrl, setImgUrl] = useState('')
+    const [idToken, setIdToken] = useState(null);
+    const [username, setUsername] = useState("");
+    const [imgUrl, setImgUrl] = useState("");
 
     const login = (token, name, url) => {
         setIdToken(token);
         setUsername(name);
         setImgUrl(url);
         setLoggedIn(true);
-        localStorage.setItem('IdToken', token);
-        localStorage.setItem('username', name);
-        localStorage.setItem('userImg', url);
+        localStorage.setItem("IdToken", token);
+        localStorage.setItem("username", name);
+        localStorage.setItem("userImg", url);
 
         // setup the refresh token function!!!!!
-    }
+    };
 
-    const setupRefreshToken = () => {
-
-    }
+    const setupRefreshToken = () => {};
 
     const logout = () => {
         setIdToken(null);
@@ -37,26 +35,26 @@ const useProvideAuth = () => {
         setImgUrl("");
         setLoggedIn(false);
         localStorage.clear();
-    }
+    };
 
     const attemptLogin = () => {
         // maybe check for the token validity? think about in regards to the refresh func
-        if (localStorage.getItem('IdToken') !== null) {
+        if (localStorage.getItem("IdToken") !== null) {
             login(
-                localStorage.getItem('IdToken'), 
-                localStorage.getItem('username'), 
-                localStorage.getItem('userImg')
+                localStorage.getItem("IdToken"),
+                localStorage.getItem("username"),
+                localStorage.getItem("userImg")
             );
             return true;
         }
         return false;
-    }
+    };
 
     // useEffect(() => {
     //     //attemptLogin();
-    //     console.log("on useauth mount?")
+    //     console.log("on useauth mount?");
     //     const unsubscribe = () => {
-    //         console.log("on useauth unmount? whats going on")
+    //         console.log("on useauth unmount? whats going on");
     //     };
     //     return () => unsubscribe();
     // }, []);
@@ -69,4 +67,4 @@ const useProvideAuth = () => {
         login: login,
         logout: logout,
     };
-}
+};
