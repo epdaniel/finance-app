@@ -62,5 +62,6 @@ const useProvideAuth = () => {
         imgUrl: imgUrl,
         login: login,
         logout: logout,
+        setIdToken: setIdToken,
     };
 };

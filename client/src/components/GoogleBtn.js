@@ -6,6 +6,7 @@ import { GoogleLogin, GoogleLogout } from "react-google-login";
 
 const CLIENT_ID =
     "232952519661-430s05vr9he9sf0o45b88nde6jid56vg.apps.googleusercontent.com";
+
 const styles = {
     GoogleContainer: {
         margin: 0,
@@ -26,15 +27,21 @@ const GoogleBtn = ({ classes }) => {
     const auth = useAuth();
 
     const login = (response) => {
-        let profile = response.getBasicProfile();
+        const refreshToken = async () => {
+            const newAuthRes = await response.reloadAuthResponse();
+            auth.setIdToken(newAuthRes.id_token);
+            const refreshTiming = (newAuthRes.expires_in || 3600) * 1000;
+            setTimeout(refreshToken, refreshTiming);
+        };
 
-        if (response.accessToken) {
-            auth.login(
-                response.getAuthResponse().id_token,
-                profile.getName(),
-                profile.getImageUrl()
-            );
-        }
+        const profile = response.getBasicProfile();
+        auth.login(
+            response.getAuthResponse().id_token,
+            profile.getName(),
+            profile.getImageUrl()
+        );
+        const refreshTiming = (response.tokenObj.expires_in || 3600) * 1000;
+        setTimeout(refreshToken, refreshTiming);
     };
 
     const logout = (response) => {
@@ -49,9 +56,7 @@ const GoogleBtn = ({ classes }) => {
         <Grid
             container
             className={classes.GoogleContainer}
-            direction="row"
             spacing={1}
-            justify="center"
             alignItems="center"
         >
             {auth.loggedIn ? (
