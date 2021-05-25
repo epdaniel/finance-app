@@ -7,16 +7,14 @@ const styles = {
     HeaderContainer: {
         width: "100%",
         margin: 0,
-        padding: 6,
-        marginBottom: 10,
-        backgroundColor: "#00adb5",
-    },
-    modalButton: {
-        marginLeft: "10px",
-        marginRight: "10px",
+        padding: 4,
+        backgroundColor: "#37474F",
     },
     header: {
-        color: "#eeeeee",
+        fontFamily: "'Playfair Display', serif",
+        color: "#ffffff",
+        paddingBottom: "3%",
+        paddingLeft: "10px",
     },
 };
 

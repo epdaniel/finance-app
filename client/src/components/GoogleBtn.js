@@ -18,7 +18,7 @@ const styles = {
         borderRadius: "50%",
     },
     googleName: {
-        color: "#3c4043",
+        color: "#ffffff",
         fontSize: "14px",
     },
 };
