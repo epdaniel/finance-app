@@ -1,8 +1,33 @@
 import React from "react";
 import Home from "./components/Home";
 import LogIn from "./components/LogIn";
-import { ProvideAuth } from "./components/useAuth";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { ProvideAuth, useAuth } from "./components/useAuth";
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    Redirect,
+} from "react-router-dom";
+
+function PrivateRoute({ children, ...rest }) {
+    let auth = useAuth();
+    return (
+        <Route
+            {...rest}
+            render={() =>
+                auth.loggedIn ? (
+                    children
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: "/login",
+                        }}
+                    />
+                )
+            }
+        />
+    );
+}
 
 function App() {
     return (
@@ -12,9 +37,9 @@ function App() {
                     <Route path="/login">
                         <LogIn />
                     </Route>
-                    <Route path="/">
+                    <PrivateRoute path="/">
                         <Home />
-                    </Route>
+                    </PrivateRoute>
                 </Switch>
             </Router>
         </ProvideAuth>

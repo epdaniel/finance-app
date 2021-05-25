@@ -2,6 +2,8 @@ import React from "react";
 import GoogleBtn from "./GoogleBtn";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
+import { useAuth } from "./useAuth";
+import { Redirect } from "react-router-dom";
 
 const styles = {
     container: {
@@ -52,4 +54,12 @@ const LogIn = ({ classes }) => {
     );
 };
 
-export default withStyles(styles)(LogIn);
+const LogInWrapper = ({ classes }) => {
+    const auth = useAuth();
+
+    return (
+        <>{auth.loggedIn ? <Redirect to="/" /> : <LogIn classes={classes} />}</>
+    );
+};
+
+export default withStyles(styles)(LogInWrapper);
