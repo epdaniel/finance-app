@@ -35,15 +35,20 @@ const EntryViewer = ({ classes }) => {
     }, [auth]);
 
     return (
-        <div>
-            {!Array.isArray(entries) || entries.length === 0 ? (
-                <div>No Transactions yet.</div>
-            ) : (
-                entries.map((data, key) => {
-                    return <Entry key={key} entry={data}></Entry>;
-                })
-            )}
-        </div>
+        <Grid container direction="column" justify="center">
+            <Grid item>
+                <h2>Transactions:</h2>
+            </Grid>
+            <Grid item>
+                {!Array.isArray(entries) || entries.length === 0 ? (
+                    <div>No Transactions yet.</div>
+                    ) : (
+                        entries.map((data, key) => {
+                            return <Entry key={key} entry={data}></Entry>;
+                        })
+                        )}
+            </Grid>
+        </Grid>
     );
 };
 
