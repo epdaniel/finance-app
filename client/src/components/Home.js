@@ -30,7 +30,6 @@ const Home = () => {
             <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
                 <DetailedEntry toggleModal={toggleEntryModal} />
             </Modal>
-            <h2>Transactions:</h2>
             <EntryViewer />
         </>
     );

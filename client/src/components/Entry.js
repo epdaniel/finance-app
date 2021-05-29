@@ -1,34 +1,36 @@
-import "../css/Entry.css";
-const { Component } = require("react");
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { Grid, Paper } from "@material-ui/core";
 
-class Entry extends Component {
-    constructor(props) {
-        super(props);
+const styles = {
+    entryPaper: {
+        width: "400px",
+        height: "120px",
+        padding: "10px",
+    },
+};
 
-        this.state = {
-            description: props.entry.description,
-            amount: props.entry.amount,
-            category: props.entry.category,
-            subCategory: props.entry.subCategory,
-            date: props.entry.timestamp,
-        };
-    }
+const Entry = ({ classes, entry }) => {
+    console.log(entry);
+    return (
+        <Paper className={classes.entryPaper} elevation={2}>
+            <Grid container spacing={1}>
+                <Grid item container xs={12} justify="space-between">
+                    <Grid item>{entry.description}</Grid>
+                    <Grid item>{entry.amount}₪</Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    Category: {entry.category}
+                </Grid>
+                <Grid item xs={12}>
+                    Sub-category: {entry.subCategory}
+                </Grid>
+                <Grid item xs={12}>
+                    Date: {entry.timestamp}
+                </Grid>
+            </Grid>
+        </Paper>
+    );
+};
 
-    render() {
-        return (
-            <div className="Entry">
-                <b className="EntryDesc">{this.state.description} </b>
-                <label>Amount:</label>
-                <b>{this.state.amount} </b>
-                <label>Category:</label>
-                <b>{this.state.category} </b>
-                <label>Sub-category:</label>
-                <b>{this.state.subCategory} </b>
-                <label>Date:</label>
-                <b>{this.state.date} </b>
-            </div>
-        );
-    }
-}
-
-export default Entry;
+export default withStyles(styles)(Entry);
