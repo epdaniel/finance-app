@@ -43,7 +43,7 @@ router.post("/add", async (req, res) => {
         description: req.body.description,
         category: req.body.category,
         subCategory: req.body.subCategory,
-        isExpnse: req.body.isExpnse,
+        isExpense: req.body.isExpense,
     });
     try {
         const newEntry = await entry.save();

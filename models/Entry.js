@@ -23,7 +23,7 @@ const EntrySchema = mongoose.Schema({
   subCategory: {
     type: String,
   },
-  isExpnse: {
+  isExpense: {
     // if not expense, then income
     type: Boolean,
   },
