@@ -5,7 +5,11 @@ import Entry from "./Entry";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
 
-const styles = {};
+const styles = {
+    containerGrid:{
+        width: "100%",
+    }
+};
 
 const EntryViewer = ({ classes }) => {
     const auth = useAuth();
@@ -41,6 +45,7 @@ const EntryViewer = ({ classes }) => {
             justify="center"
             alignItems="center"
             spacing={2}
+            className={classes.containerGrid}
         >
             <Grid item>
                 <Typography variant="h4">Transactions</Typography>
