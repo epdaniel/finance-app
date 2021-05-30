@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDate } from "../lib/utils";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Paper } from "@material-ui/core";
 
@@ -11,9 +12,9 @@ const styles = {
 };
 
 const Entry = ({ classes, entry }) => {
-    console.log(entry);
+    console.log(entry)
     return (
-        <Paper className={classes.entryPaper} elevation={2}>
+        <Paper className={classes.entryPaper} elevation={4}>
             <Grid container spacing={1}>
                 <Grid item container xs={12} justify="space-between">
                     <Grid item>{entry.description}</Grid>
@@ -26,7 +27,10 @@ const Entry = ({ classes, entry }) => {
                     Sub-category: {entry.subCategory}
                 </Grid>
                 <Grid item xs={12}>
-                    Date: {entry.timestamp}
+                    Date: {formatDate(entry.timestamp)}
+                </Grid>
+                <Grid item xs={12}>
+                    is expense: {entry.isExpense ? "Yes" : "No"}
                 </Grid>
             </Grid>
         </Paper>
