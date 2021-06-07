@@ -9,5 +9,6 @@ TODO:
 
 -   send token in auth header as Bearer token
 -   make the timezone format better
--   stylize the entry
+-   re-stylize the entry
 -   filter entries?
+-   Move to react final form

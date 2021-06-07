@@ -1,7 +1,7 @@
 
 export function formatDate(date){
-    let dateObj = new Date(date)
-    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-
-    return dateObj.toLocaleDateString("en-IL", options);
+    const dateObj = new Date(date)
+    const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
+    const locale = navigator.languages.length > 0 ? navigator.languages[0] : 'en';
+    return dateObj.toLocaleDateString(locale, options);
 };
