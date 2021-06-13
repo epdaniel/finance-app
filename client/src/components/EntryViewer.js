@@ -21,7 +21,7 @@ const EntryViewer = ({ classes }) => {
             axios
                 .get("/entries/all", {
                     headers: {
-                        id_token: auth.idToken,
+                        Authorization: auth.idToken,
                     },
                 })
                 .then((res) => {

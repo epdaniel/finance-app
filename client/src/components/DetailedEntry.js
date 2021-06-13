@@ -41,11 +41,17 @@ const DetailedEntry = ({ classes, toggleModal }) => {
     const auth = useAuth();
     const { handleSubmit, reset, control } = useForm({ defaultValues });
     const onSubmit = async (data) => {
-        data["id_token"] = auth.idToken;
         data["isExpense"] = data["isExpense"] === "expense";
         //let res =
         await axios
-            .post("/entries/add", data) //use res later to update list?
+            .post("/entries/add", 
+                data,
+                {
+                    headers: {
+                        Authorization: auth.idToken,
+                    }
+                },
+            ) //use res later to update list?
             .catch((e) => {
                 alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message);
                 return;

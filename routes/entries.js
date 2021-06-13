@@ -1,29 +1,44 @@
-const Entry = require("../models/Entry");
 const { OAuth2Client } = require("google-auth-library");
+const Entry = require("../models/Entry");
 const express = require("express");
 const router = express.Router();
 require("dotenv/config");
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const authClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // maybe use controllers like so:
 // const controllers = require('./../controllers/controllers');
 // router.get('/say-something', controllers.saySomething);
 
 async function verifyGoogleAccount(token) {
-    const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-    const userid = payload["sub"];
-    return userid;
+    try{
+        const ticket = await authClient.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const userid = payload["sub"];
+
+        return {
+            userId: userid,
+            error: null
+        };
+    }catch (error){
+        console.log('Error verifying google account: ' + error)
+        return {
+            userId: -1,
+            error: error
+        };
+    }
 }
 
 router.get("/all", async (req, res) => {
-    console.log("got all");
     try {
-        let userId = await verifyGoogleAccount(req.headers.id_token);
+        const {userId, error} = await verifyGoogleAccount(req.headers.authorization);
+        if (userId === -1){
+            res.status(401).send(error);
+            return;
+        }
         const entries = await Entry.find({ userId: userId }).sort({
             timestamp: -1,
         });
@@ -35,17 +50,22 @@ router.get("/all", async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
-    let userId = await verifyGoogleAccount(req.body.id_token);
-    const entry = new Entry({
-        userId: userId,
-        timestamp: req.body.timestamp,
-        amount: req.body.amount,
-        description: req.body.description,
-        category: req.body.category,
-        subCategory: req.body.subCategory,
-        isExpense: req.body.isExpense,
-    });
     try {
+        const {userId, error} = await verifyGoogleAccount(req.headers.authorization);
+        if (userId === -1){
+            res.status(401).send(error);
+            return;
+        }
+        const entry = new Entry({
+            userId: userId,
+            timestamp: req.body.timestamp,
+            amount: req.body.amount,
+            description: req.body.description,
+            category: req.body.category,
+            subCategory: req.body.subCategory,
+            isExpense: req.body.isExpense,
+        });
+
         const newEntry = await entry.save();
         res.status(200).send(newEntry);
     } catch (error) {

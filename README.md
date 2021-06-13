@@ -7,8 +7,8 @@ Deployed in herokuapp: https://dans-finance.herokuapp.com/
 
 TODO:
 
--   send token in auth header as Bearer token
--   make the timezone format better
+-   Remove reload window occurences
+-   loading icon while pulling data
 -   re-stylize the entry
 -   filter entries?
 -   Move to react final form
