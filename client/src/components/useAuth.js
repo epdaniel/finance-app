@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useContext, createContext } from "react";
 
 const authContext = createContext();
 
@@ -20,9 +20,6 @@ const useProvideAuth = () => {
         setUsername(name);
         setImgUrl(url);
         setLoggedIn(true);
-        // localStorage.setItem("IdToken", token);
-        // localStorage.setItem("username", name);
-        // localStorage.setItem("userImg", url);
     };
 
     const logout = () => {
@@ -30,30 +27,7 @@ const useProvideAuth = () => {
         setUsername("");
         setImgUrl("");
         setLoggedIn(false);
-        localStorage.clear();
     };
-
-    // const attemptLogin = () => {
-    //     // maybe check for the token validity? think about in regards to the refresh func
-    //     if (localStorage.getItem("IdToken") !== null) {
-    //         login(
-    //             localStorage.getItem("IdToken"),
-    //             localStorage.getItem("username"),
-    //             localStorage.getItem("userImg")
-    //         );
-    //         return true;
-    //     }
-    //     return false;
-    // };
-
-    useEffect(() => {
-        //attemptLogin();
-        console.log("on useauth mount?");
-        const unsubscribe = () => {
-            console.log("on useauth unmount? whats going on");
-        };
-        return () => unsubscribe();
-    }, []);
 
     return {
         loggedIn: loggedIn,
