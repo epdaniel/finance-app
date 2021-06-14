@@ -6,9 +6,9 @@ import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
 
 const styles = {
-    containerGrid:{
+    containerGrid: {
         width: "100%",
-    }
+    },
 };
 
 const EntryViewer = ({ classes }) => {

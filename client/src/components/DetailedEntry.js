@@ -44,14 +44,11 @@ const DetailedEntry = ({ classes, toggleModal }) => {
         data["isExpense"] = data["isExpense"] === "expense";
         //let res =
         await axios
-            .post("/entries/add", 
-                data,
-                {
-                    headers: {
-                        Authorization: auth.idToken,
-                    }
+            .post("/entries/add", data, {
+                headers: {
+                    Authorization: auth.idToken,
                 },
-            ) //use res later to update list?
+            }) //use res later to update list?
             .catch((e) => {
                 alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message);
                 return;
