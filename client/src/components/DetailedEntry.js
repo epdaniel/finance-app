@@ -37,25 +37,24 @@ const defaultValues = {
     isExpense: "expense",
 };
 
-const DetailedEntry = ({ classes, toggleModal }) => {
+const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
     const auth = useAuth();
     const { handleSubmit, reset, control } = useForm({ defaultValues });
     const onSubmit = async (data) => {
         data["isExpense"] = data["isExpense"] === "expense";
-        //let res =
-        await axios
+        const response = await axios
             .post("/entries/add", data, {
                 headers: {
                     Authorization: auth.idToken,
                 },
-            }) //use res later to update list?
+            })
             .catch((e) => {
                 alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message);
                 return;
             });
+        addEntryToList(response.data);
         reset();
         toggleModal();
-        window.location.reload(); // TODO: remove this embarrassment
     };
 
     const entryToggleHandler = (e) => {

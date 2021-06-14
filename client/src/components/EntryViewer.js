@@ -19,7 +19,7 @@ const EntryViewer = ({ classes }) => {
     const [showEntryModal, setShowEntryModal] = useState(false);
 
     useEffect(() => {
-        console.log("Loading entries!");
+        console.log("Loading entries...");
         if (auth.loggedIn && auth.idToken) {
             axios
                 .get("/entries/all", {
@@ -27,12 +27,7 @@ const EntryViewer = ({ classes }) => {
                         Authorization: auth.idToken,
                     },
                 })
-                .then((res) => {
-                    console.log(res);
-                    let entries = res.data;
-                    console.log("got " + entries.length + " entries");
-                    setEntries(res.data);
-                })
+                .then((res) => setEntries(res.data))
                 .catch((e) => {
                     alert("PLACEHOLDER ERROR DISPLAY: " + e.message);
                 });
@@ -41,8 +36,10 @@ const EntryViewer = ({ classes }) => {
         }
     }, [auth]);
 
-    const toggleEntryModal = () => {
-        setShowEntryModal((prev) => !prev);
+    const toggleEntryModal = () => setShowEntryModal((prev) => !prev);
+
+    const addEntryToList = (entry) => {
+        setEntries([entry, ...entries]);
     };
 
     return (
@@ -51,7 +48,10 @@ const EntryViewer = ({ classes }) => {
                 Add entry
             </button>
             <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
-                <DetailedEntry toggleModal={toggleEntryModal} />
+                <DetailedEntry
+                    toggleModal={toggleEntryModal}
+                    addEntryToList={addEntryToList}
+                />
             </Modal>
             <Grid
                 container

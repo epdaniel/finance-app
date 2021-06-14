@@ -12,7 +12,6 @@ const styles = {
 };
 
 const Entry = ({ classes, entry }) => {
-    console.log(entry);
     return (
         <Paper className={classes.entryPaper} elevation={4}>
             <Grid container spacing={1}>
