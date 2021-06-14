@@ -11,6 +11,7 @@ const styles = {
     GoogleContainer: {
         margin: 0,
         marginRight: 4,
+        width: "100%",
     },
     UserImage: {
         width: "28px",

@@ -1,9 +1,11 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { useAuth } from "./useAuth";
+import Modal from "./Modal";
 import Entry from "./Entry";
-import { withStyles } from "@material-ui/core/styles";
+import { useAuth } from "./useAuth";
+import DetailedEntry from "./DetailedEntry";
+import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const styles = {
     containerGrid: {
@@ -14,6 +16,7 @@ const styles = {
 const EntryViewer = ({ classes }) => {
     const auth = useAuth();
     const [entries, setEntries] = useState([]);
+    const [showEntryModal, setShowEntryModal] = useState(false);
 
     useEffect(() => {
         console.log("Loading entries!");
@@ -38,30 +41,42 @@ const EntryViewer = ({ classes }) => {
         }
     }, [auth]);
 
+    const toggleEntryModal = () => {
+        setShowEntryModal((prev) => !prev);
+    };
+
     return (
-        <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-            className={classes.containerGrid}
-        >
-            <Grid item>
-                <Typography variant="h4">Transactions</Typography>
+        <>
+            <button className="addEntryButton" onClick={toggleEntryModal}>
+                Add entry
+            </button>
+            <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
+                <DetailedEntry toggleModal={toggleEntryModal} />
+            </Modal>
+            <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+                spacing={2}
+                className={classes.containerGrid}
+            >
+                <Grid item>
+                    <Typography variant="h4">Transactions</Typography>
+                </Grid>
+                {!Array.isArray(entries) || entries.length === 0 ? (
+                    <div>No Transactions yet.</div>
+                ) : (
+                    entries.map((data, key) => {
+                        return (
+                            <Grid item key={key}>
+                                <Entry entry={data}></Entry>
+                            </Grid>
+                        );
+                    })
+                )}
             </Grid>
-            {!Array.isArray(entries) || entries.length === 0 ? (
-                <div>No Transactions yet.</div>
-            ) : (
-                entries.map((data, key) => {
-                    return (
-                        <Grid item key={key}>
-                            <Entry entry={data}></Entry>
-                        </Grid>
-                    );
-                })
-            )}
-        </Grid>
+        </>
     );
 };
 
