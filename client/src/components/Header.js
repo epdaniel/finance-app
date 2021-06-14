@@ -8,6 +8,7 @@ const styles = {
         width: "100%",
         margin: 0,
         padding: 4,
+        paddingRight: 0,
         backgroundColor: "#37474F",
     },
     header: {
