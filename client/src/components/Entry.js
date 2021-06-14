@@ -6,7 +6,7 @@ import { Grid, Paper } from "@material-ui/core";
 const styles = {
     entryPaper: {
         width: "400px",
-        height: "120px",
+        height: "140px",
         padding: "10px",
     },
 };
