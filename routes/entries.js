@@ -11,7 +11,7 @@ const authClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // router.get('/say-something', controllers.saySomething);
 
 async function verifyGoogleAccount(token) {
-    try{
+    try {
         const ticket = await authClient.verifyIdToken({
             idToken: token,
             audience: process.env.GOOGLE_CLIENT_ID,
@@ -21,21 +21,23 @@ async function verifyGoogleAccount(token) {
 
         return {
             userId: userid,
-            error: null
+            error: null,
         };
-    }catch (error){
-        console.log('Error verifying google account: ' + error)
+    } catch (error) {
+        console.log("Error verifying google account: " + error);
         return {
             userId: -1,
-            error: error
+            error: error,
         };
     }
 }
 
 router.get("/all", async (req, res) => {
     try {
-        const {userId, error} = await verifyGoogleAccount(req.headers.authorization);
-        if (userId === -1){
+        const { userId, error } = await verifyGoogleAccount(
+            req.headers.authorization
+        );
+        if (userId === -1) {
             res.status(401).send(error);
             return;
         }
@@ -51,8 +53,10 @@ router.get("/all", async (req, res) => {
 
 router.post("/add", async (req, res) => {
     try {
-        const {userId, error} = await verifyGoogleAccount(req.headers.authorization);
-        if (userId === -1){
+        const { userId, error } = await verifyGoogleAccount(
+            req.headers.authorization
+        );
+        if (userId === -1) {
             res.status(401).send(error);
             return;
         }
