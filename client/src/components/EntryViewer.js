@@ -4,12 +4,13 @@ import Entry from "./Entry";
 import { useAuth } from "./useAuth";
 import DetailedEntry from "./DetailedEntry";
 import React, { useState, useEffect } from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, IconButton } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
 
 const styles = {
     containerGrid: {
-        width: "100%",
+        width: "450px",
     },
 };
 
@@ -44,9 +45,6 @@ const EntryViewer = ({ classes }) => {
 
     return (
         <>
-            <button className="addEntryButton" onClick={toggleEntryModal}>
-                Add entry
-            </button>
             <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
                 <DetailedEntry
                     toggleModal={toggleEntryModal}
@@ -61,8 +59,24 @@ const EntryViewer = ({ classes }) => {
                 spacing={2}
                 className={classes.containerGrid}
             >
-                <Grid item>
-                    <Typography variant="h4">Transactions</Typography>
+                <Grid
+                    item
+                    container
+                    justify="space-between"
+                    alignItems="center"
+                >
+                    <Grid item>
+                        <Typography variant="h4">Transactions</Typography>
+                    </Grid>
+                    <Grid item>
+                        <IconButton
+                            aria-label="add entry"
+                            onClick={toggleEntryModal}
+                            component="span"
+                        >
+                            <AddIcon fontSize="large" />
+                        </IconButton>
+                    </Grid>
                 </Grid>
                 {!Array.isArray(entries) || entries.length === 0 ? (
                     <div>No Transactions yet.</div>
