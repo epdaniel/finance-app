@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useAuth } from "./useAuth";
+import { MdClose } from "react-icons/md";
 import { withStyles } from "@material-ui/core/styles";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -12,6 +13,7 @@ import {
     RadioGroup,
     Radio,
     FormControlLabel,
+    IconButton,
 } from "@material-ui/core";
 //DateTime picker
 import DateFnsUtils from "@date-io/date-fns";
@@ -21,14 +23,22 @@ const styles = {
     EntryContainer: {
         width: "100%",
         margin: 0,
+        textAlign: "center",
+        paddingBottom: "0px",
     },
     modalButton: {
         marginLeft: "10px",
         marginRight: "10px",
     },
+    radio: {
+        color: "#37474F",
+        "&$checked": {
+            color: "#37474F",
+        },
+    },
 };
 
-const defaultValues = {
+let defaultValues = {
     description: "",
     amount: "",
     category: "",
@@ -37,8 +47,20 @@ const defaultValues = {
     isExpense: "expense",
 };
 
-const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
+const DetailedEntry = ({
+    classes,
+    toggleModal,
+    addEntryToList,
+    entry,
+    toggle,
+}) => {
     const auth = useAuth();
+    if (entry) {
+        defaultValues = {
+            ...entry,
+            isExpense: entry["isExpense"] ? "expense" : "income",
+        };
+    }
     const { handleSubmit, reset, control } = useForm({ defaultValues });
     const onSubmit = async (data) => {
         data["isExpense"] = data["isExpense"] === "expense";
@@ -52,9 +74,14 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
                 alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message);
                 return;
             });
-        addEntryToList(response.data);
-        reset();
-        toggleModal();
+        if (!entry) {
+            addEntryToList(response.data);
+            reset();
+            toggleModal();
+        } else {
+            toggle();
+            //update entry
+        }
     };
 
     const entryToggleHandler = (e) => {
@@ -66,15 +93,38 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
             <Grid
                 container
                 className={classes.EntryContainer}
-                spacing={8}
+                spacing={3}
                 direction="row"
                 justify="center"
                 alignItems="center"
             >
-                <Grid item xs={12} sm={12}>
-                    <Typography variant="h4">Add Transaction</Typography>
+                <Grid
+                    container
+                    item
+                    xs={12}
+                    justify="space-between"
+                    alignItems="center"
+                    style={{ paddingTop: "0px" }}
+                >
+                    <Grid item>
+                        <Typography variant="h5" onClick={toggle}>
+                            {entry ? "Edit Transaction" : "Add Transaction"}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <IconButton
+                            aria-label="close"
+                            onClick={toggle}
+                            component="span"
+                        >
+                            <MdClose
+                                className={classes.closeButton}
+                                aria-label="Close"
+                            ></MdClose>
+                        </IconButton>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                     <Controller
                         name="description"
                         control={control}
@@ -83,7 +133,7 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                     <Controller
                         name="amount"
                         control={control}
@@ -92,7 +142,7 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                     <Controller
                         name="category"
                         control={control}
@@ -101,7 +151,7 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                     <Controller
                         name="subCategory"
                         control={control}
@@ -110,7 +160,7 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                     <Controller
                         name="timestamp"
                         control={control}
@@ -125,7 +175,7 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                     <Controller
                         name="isExpense"
                         control={control}
@@ -141,12 +191,22 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
                                 >
                                     <FormControlLabel
                                         value="expense"
-                                        control={<Radio />}
+                                        control={
+                                            <Radio
+                                                color="custom"
+                                                className={classes.radio}
+                                            />
+                                        }
                                         label="Expense"
                                     />
                                     <FormControlLabel
                                         value="income"
-                                        control={<Radio />}
+                                        control={
+                                            <Radio
+                                                color="custom"
+                                                className={classes.radio}
+                                            />
+                                        }
                                         label="Income"
                                     />
                                 </RadioGroup>
@@ -154,24 +214,27 @@ const DetailedEntry = ({ classes, toggleModal, addEntryToList }) => {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} style={{ paddingBottom: "0px" }}>
                     <Button
                         className={classes.modalButton}
                         type="submit"
                         variant="contained"
-                        color="primary"
+                        color="custom"
+                        style={{ backgroundColor: "#37474F", color: "white" }}
                     >
-                        Add Transaction
+                        {entry ? "Save" : "Add Transaction"}
                     </Button>
-                    <Button
-                        className={classes.modalButton}
-                        type="button"
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => reset()}
-                    >
-                        Clear
-                    </Button>
+                    {entry ? null : (
+                        <Button
+                            className={classes.modalButton}
+                            type="button"
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => reset()}
+                        >
+                            Clear
+                        </Button>
+                    )}
                 </Grid>
             </Grid>
         </form>

@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { formatDate } from "../lib/utils";
 import { withStyles } from "@material-ui/core/styles";
-import { Grid, Paper, Typography } from "@material-ui/core";
+import { Grid, Typography, Card } from "@material-ui/core";
+import Collapse from "@material-ui/core/Collapse";
+import CardContent from "@material-ui/core/CardContent";
+import DetailedEntry from "./DetailedEntry";
 
 const styles = {
-    entryPaper: {
+    entryCard: {
         width: "420px",
-        height: "70px",
+        minHeight: "70px",
         padding: "15px",
     },
     expense: {
@@ -15,39 +18,65 @@ const styles = {
     income: {
         color: "#006b0c",
     },
+    cardContent: {
+        padding: "0px",
+    },
 };
 
 const Entry = ({ classes, entry }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    const toggleExpanded = () => setExpanded(!expanded);
+
     return (
-        <Paper className={classes.entryPaper} elevation={4}>
-            <Grid container spacing={2}>
-                <Grid item container xs={12} justify="space-between">
-                    <Grid item>
-                        <Typography variant="h5">
-                            {entry.description}
-                        </Typography>
+        <Card
+            className={classes.entryCard}
+            elevation={4}
+            onClick={toggleExpanded}
+        >
+            <Collapse in={!expanded} unmountOnExit disableStrictModeCompat>
+                <Grid container spacing={2}>
+                    <Grid item container xs={12} justify="space-between">
+                        <Grid item>
+                            <Typography variant="h5">
+                                {entry.description}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Typography
+                                variant="h6"
+                                className={
+                                    entry.isExpense
+                                        ? classes.expense
+                                        : classes.income
+                                }
+                            >
+                                {entry.isExpense ? "-" : "+"}
+                                {entry.amount}₪
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Grid item>
-                        <Typography
-                            variant="h6"
-                            className={
-                                entry.isExpense
-                                    ? classes.expense
-                                    : classes.income
-                            }
-                        >
-                            {entry.isExpense ? "-" : "+"}
-                            {entry.amount}₪
-                        </Typography>
+                    <Grid item container xs={12} justify="space-between">
+                        <Grid item>{entry.category}</Grid>
+                        <Grid item>{entry.subCategory}</Grid>
+                        <Grid item>{formatDate(entry.timestamp)}</Grid>
                     </Grid>
                 </Grid>
-                <Grid item container xs={12} justify="space-between">
-                    <Grid item>{entry.category}</Grid>
-                    <Grid item>{entry.subCategory}</Grid>
-                    <Grid item>{formatDate(entry.timestamp)}</Grid>
-                </Grid>
-            </Grid>
-        </Paper>
+            </Collapse>
+            <Collapse
+                in={expanded}
+                timeout="auto" //{{ appear: 100, enter: 200, exit: 500 }}
+                unmountOnExit
+                disableStrictModeCompat
+            >
+                <CardContent
+                    className={classes.cardContent}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <DetailedEntry entry={entry} toggle={toggleExpanded} />
+                </CardContent>
+            </Collapse>
+        </Card>
     );
 };
 
