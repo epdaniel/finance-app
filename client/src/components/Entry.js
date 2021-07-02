@@ -8,7 +8,7 @@ import DetailedEntry from "./DetailedEntry";
 
 const styles = {
     entryCard: {
-        width: "420px",
+        width: "430px",
         minHeight: "70px",
         padding: "15px",
     },
@@ -23,7 +23,7 @@ const styles = {
     },
 };
 
-const Entry = ({ classes, entry }) => {
+const Entry = ({ classes, entry, updateEntry }) => {
     const [expanded, setExpanded] = useState(false);
 
     const toggleExpanded = () => setExpanded(!expanded);
@@ -57,8 +57,12 @@ const Entry = ({ classes, entry }) => {
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} justify="space-between">
-                        <Grid item>{entry.category}</Grid>
-                        <Grid item>{entry.subCategory}</Grid>
+                        <Grid item>
+                            <Typography>{entry.category}</Typography>
+                        </Grid>
+                        <Grid item style={{ color: "grey" }}>
+                            {entry.subCategory}
+                        </Grid>
                         <Grid item>{formatDate(entry.timestamp)}</Grid>
                     </Grid>
                 </Grid>
@@ -73,7 +77,11 @@ const Entry = ({ classes, entry }) => {
                     className={classes.cardContent}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <DetailedEntry entry={entry} toggle={toggleExpanded} />
+                    <DetailedEntry
+                        entry={entry}
+                        toggle={toggleExpanded}
+                        setEntry={updateEntry}
+                    />
                 </CardContent>
             </Collapse>
         </Card>

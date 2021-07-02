@@ -53,6 +53,7 @@ const DetailedEntry = ({
     addEntryToList,
     entry,
     toggle,
+    setEntry,
 }) => {
     const auth = useAuth();
     if (entry) {
@@ -64,25 +65,43 @@ const DetailedEntry = ({
     const { handleSubmit, reset, control } = useForm({ defaultValues });
     const onSubmit = async (data) => {
         data["isExpense"] = data["isExpense"] === "expense";
-        const response = await axios
-            .post("/entries/add", data, {
-                headers: {
-                    Authorization: auth.idToken,
-                },
-            })
-            .catch((e) => {
-                alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message);
-                return;
-            });
         if (!entry) {
+            //New entry
+            const response = await axios
+                .post("/entries/add", data, {
+                    headers: {
+                        Authorization: auth.idToken,
+                    },
+                })
+                .catch((e) => {
+                    alert(
+                        "PLACEHOLDER ERROR DISPLAY: " + e.response.data.message
+                    );
+                    return;
+                });
             addEntryToList(response.data);
             reset();
             toggleModal();
         } else {
+            //Update entry
+            const response = await axios
+                .patch("/entries/" + entry._id + "/update", data, {
+                    headers: {
+                        Authorization: auth.idToken,
+                    },
+                })
+                .catch((e) => {
+                    alert(
+                        "PLACEHOLDER ERROR DISPLAY: " + e.response.data.message
+                    );
+                    return;
+                });
+            setEntry(response.data);
             toggle();
-            //update entry
         }
     };
+
+    const deleteEntry = async () => {};
 
     const entryToggleHandler = (e) => {
         console.log("handler!");
@@ -193,7 +212,7 @@ const DetailedEntry = ({
                                         value="expense"
                                         control={
                                             <Radio
-                                                color="custom"
+                                                color="default"
                                                 className={classes.radio}
                                             />
                                         }
@@ -203,7 +222,7 @@ const DetailedEntry = ({
                                         value="income"
                                         control={
                                             <Radio
-                                                color="custom"
+                                                color="default"
                                                 className={classes.radio}
                                             />
                                         }
@@ -219,7 +238,7 @@ const DetailedEntry = ({
                         className={classes.modalButton}
                         type="submit"
                         variant="contained"
-                        color="custom"
+                        color="default"
                         style={{ backgroundColor: "#37474F", color: "white" }}
                     >
                         {entry ? "Save" : "Add Transaction"}

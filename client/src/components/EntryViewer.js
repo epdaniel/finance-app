@@ -10,7 +10,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 const styles = {
     containerGrid: {
-        width: "450px",
+        width: "auto",
     },
 };
 
@@ -41,6 +41,14 @@ const EntryViewer = ({ classes }) => {
 
     const addEntryToList = (entry) => {
         setEntries([entry, ...entries]);
+    };
+    const updateEntry = (index) => {
+        return (newEntry) =>
+            setEntries([
+                ...entries.slice(0, index),
+                newEntry,
+                ...entries.slice(index + 1),
+            ]);
     };
 
     return (
@@ -81,13 +89,14 @@ const EntryViewer = ({ classes }) => {
                 {!Array.isArray(entries) || entries.length === 0 ? (
                     <div>No Transactions yet.</div>
                 ) : (
-                    entries.map((data, key) => {
-                        return (
-                            <Grid item key={key}>
-                                <Entry entry={data}></Entry>
-                            </Grid>
-                        );
-                    })
+                    entries.map((data, i) => (
+                        <Grid item key={data.id}>
+                            <Entry
+                                entry={data}
+                                updateEntry={updateEntry(i)}
+                            ></Entry>
+                        </Grid>
+                    ))
                 )}
             </Grid>
         </>

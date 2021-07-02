@@ -87,26 +87,22 @@ router.delete("/:entryId/delete", async (req, res) => {
     }
 });
 
-router.patch("/:entryId/update ", async (req, res) => {
-    const newEntry = new Entry({
-        userId: req.body.userId,
-        timestamp: req.body.timestamp,
-        amount: req.body.amount,
-        description: req.body.description,
-        category: req.body.category,
-        subCategory: req.body.subCategory,
-    });
-
+router.patch("/:entryId/update", async (req, res) => {
     try {
-        const updatedEntry = await Entry.findOneAndUpdate(
-            { _id: req.params.entryId },
-            newEntry,
-            {
-                returnOriginal: false,
-            }
+        const { userId, error } = await verifyGoogleAccount(
+            req.headers.authorization
         );
-        res.json(updatedEntry);
+        if (userId === -1) {
+            res.status(401).send(error);
+            return;
+        }
+        const _id = req.params.entryId;
+        const updatedEntry = await Entry.findByIdAndUpdate(_id, req.body, {
+            new: true,
+        });
+        res.status(200).send(updatedEntry);
     } catch (error) {
+        console.log("Error updating entry: " + error);
         res.status(400).send(error);
     }
 });

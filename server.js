@@ -1,6 +1,7 @@
 // Import dependencies
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false);
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
