@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import GoogleBtn from "./GoogleBtn";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
@@ -7,20 +7,19 @@ const styles = {
     HeaderContainer: {
         width: "100%",
         margin: 0,
-        padding: 6,
-        marginBottom: 10,
-        backgroundColor: '#00adb5',
-    },
-    modalButton: {
-        marginLeft: "10px",
-        marginRight: "10px",
+        padding: 4,
+        paddingRight: 0,
+        backgroundColor: "#37474F",
     },
     header: {
-        color: '#eeeeee'
-    }
+        fontFamily: "'Playfair Display', serif",
+        color: "#ffffff",
+        paddingBottom: "3%",
+        paddingLeft: "10px",
+    },
 };
 
-const Header = ({ classes, logInCallback }) => {
+const Header = ({ classes }) => {
     return (
         <Grid
             container
@@ -30,13 +29,15 @@ const Header = ({ classes, logInCallback }) => {
             alignItems="center"
         >
             <Grid item>
-                <Typography variant="h4" className={classes.header}>Finance App</Typography>
+                <Typography variant="h4" className={classes.header}>
+                    Finance App
+                </Typography>
             </Grid>
             <Grid item>
-                <GoogleBtn logInCallback={logInCallback}></GoogleBtn>
+                <GoogleBtn></GoogleBtn>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default withStyles(styles)(Header);

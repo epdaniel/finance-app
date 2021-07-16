@@ -1,43 +1,49 @@
-import React, { useState } from "react";
-import "./css/App.css";
-import Modal from "./components/Modal";
-import Header from "./components/Header";
-import UserProfile from "./components/userProfile";
-import EntryViewer from "./components/EntryViewer";
-import DetailedEntry from "./components/DetailedEntry";
+import React from "react";
+import Home from "./components/Home";
+import LogIn from "./components/LogIn";
+import { ProvideAuth, useAuth } from "./components/useAuth";
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    Redirect,
+} from "react-router-dom";
+
+function PrivateRoute({ children, ...rest }) {
+    let auth = useAuth();
+    return (
+        <Route
+            {...rest}
+            render={() =>
+                auth.loggedIn ? (
+                    children
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: "/login",
+                        }}
+                    />
+                )
+            }
+        />
+    );
+}
 
 function App() {
-  const [showEntryModal, setShowEntryModal] = useState(false);
-  const [showLogInError, setLogInError] = useState(false);
-
-  const toggleEntryModal = () => {
-    if (UserProfile.isLoggedIn()) setShowEntryModal((prev) => !prev);
-    else {
-      setLogInError(true);
-    }
-  };
-
-  return (
-    <>
-      <div className="App">
-        <Header logInCallback={() => setLogInError(false)} />
-        <button className="addEntryButton" onClick={toggleEntryModal}>
-          Add entry
-        </button>
-        {showLogInError && (
-          <p>
-            <br />
-            Please log in first!
-          </p>
-        )}
-        <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
-          <DetailedEntry />
-        </Modal>
-        <h2>Transactions:</h2>
-        <EntryViewer />
-      </div>
-    </>
-  );
+    return (
+        <ProvideAuth>
+            <Router>
+                <Switch>
+                    <Route path="/login">
+                        <LogIn />
+                    </Route>
+                    <PrivateRoute path="/">
+                        <Home />
+                    </PrivateRoute>
+                </Switch>
+            </Router>
+        </ProvideAuth>
+    );
 }
 
 export default App;

@@ -1,165 +1,263 @@
 import axios from "axios";
 import React from "react";
-import UserProfile from "./userProfile";
+import { useAuth } from "./useAuth";
+import { MdClose } from "react-icons/md";
 import { withStyles } from "@material-ui/core/styles";
 import { useForm, Controller } from "react-hook-form";
-import { Grid, TextField, Typography, Button, FormControl, RadioGroup, Radio, FormControlLabel } from "@material-ui/core";
+import {
+    Grid,
+    TextField,
+    Typography,
+    Button,
+    FormControl,
+    RadioGroup,
+    Radio,
+    FormControlLabel,
+    IconButton,
+} from "@material-ui/core";
 //DateTime picker
 import DateFnsUtils from "@date-io/date-fns";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 const styles = {
-  EntryContainer: {
-    width: "100%",
-    margin: 0,
-  },
-  modalButton: {
-    marginLeft: "10px",
-    marginRight: "10px",
-  },
+    EntryContainer: {
+        width: "100%",
+        margin: 0,
+        textAlign: "center",
+        paddingBottom: "0px",
+    },
+    modalButton: {
+        marginLeft: "10px",
+        marginRight: "10px",
+    },
+    radio: {
+        color: "#37474F",
+        "&$checked": {
+            color: "#37474F",
+        },
+    },
 };
 
-const defaultValues = {
-  description: "",
-  amount: "",
-  category: "",
-  subCategory: "",
-  timestamp: new Date(),
-  isExpense: "expense",
+let defaultValues = {
+    description: "",
+    amount: "",
+    category: "",
+    subCategory: "",
+    timestamp: new Date(),
+    isExpense: "expense",
 };
 
-const DetailedEntry = ({ classes }) => {
-  const { handleSubmit, reset, control } = useForm({ defaultValues });
-  const onSubmit = async (data) => {
-    data['id_token'] = UserProfile.getId();
-    data['isExpense'] = data['isExpense'] === 'expense'
-    //let res = 
-    await axios.post("/entries/add", data) //use res later to update list?
-      .catch(e => {
-        alert("PLACEHOLDER ERROR DISPLAY: " + e.response.data.message)
-        return
-      });
-    alert('Added succesfully!')
-    reset()
-  };
+const DetailedEntry = ({
+    classes,
+    toggleModal,
+    addEntryToList,
+    entry,
+    toggle,
+    setEntry,
+}) => {
+    const auth = useAuth();
+    if (entry) {
+        defaultValues = {
+            ...entry,
+            isExpense: entry["isExpense"] ? "expense" : "income",
+        };
+    }
+    const { handleSubmit, reset, control } = useForm({ defaultValues });
+    const onSubmit = async (data) => {
+        data["isExpense"] = data["isExpense"] === "expense";
+        if (!entry) {
+            //New entry
+            const response = await axios
+                .post("/entries/add", data, {
+                    headers: {
+                        Authorization: auth.idToken,
+                    },
+                })
+                .catch((e) => {
+                    alert(
+                        "PLACEHOLDER ERROR DISPLAY: " + e.response.data.message
+                    );
+                    return;
+                });
+            addEntryToList(response.data);
+            reset();
+            toggleModal();
+        } else {
+            //Update entry
+            const response = await axios
+                .patch("/entries/" + entry._id + "/update", data, {
+                    headers: {
+                        Authorization: auth.idToken,
+                    },
+                })
+                .catch((e) => {
+                    alert(
+                        "PLACEHOLDER ERROR DISPLAY: " + e.response.data.message
+                    );
+                    return;
+                });
+            setEntry(response.data);
+            toggle();
+        }
+    };
 
-  const entryToggleHandler = (e) => {
-    console.log("handler!")
-  }
+    const deleteEntry = async () => {};
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid
-        container
-        className={classes.EntryContainer}
-        spacing={8}
-        direction="row"
-        justify="center"
-        alignItems="center"
-      >
-        <Grid item xs={12} sm={12}>
-          <Typography variant="h4">Add Transaction</Typography>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Description"
-                {...field}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="amount"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Sum"
-                type="number"
-                {...field}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Category"
-                {...field}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="subCategory"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Sub-Category"
-                {...field}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="timestamp"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DateTimePicker
-                  label="Date"
-                  value={value}
-                  onChange={onChange}
-                />
-              </MuiPickersUtilsProvider>
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="isExpense"
-            control={control}
-            render={({ field }) => (
-              <FormControl component="fieldset" onChange={entryToggleHandler}>
-                <RadioGroup aria-label="entryType" name="entryType1" {...field}>
-                  <FormControlLabel value="expense" control={<Radio />} label="Expense" />
-                  <FormControlLabel value="income" control={<Radio />} label="Income" />
-                </RadioGroup>
-              </FormControl>
-            )}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            className={classes.modalButton}
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Add Transaction
-          </Button>
-          <Button
-            className={classes.modalButton}
-            type="button"
-            variant="contained"
-            color="secondary"
-            onClick={() => reset()}
-          >
-            Clear
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
-  );
+    const entryToggleHandler = (e) => {
+        console.log("handler!");
+    };
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Grid
+                container
+                className={classes.EntryContainer}
+                spacing={3}
+                direction="row"
+                justify="center"
+                alignItems="center"
+            >
+                <Grid
+                    container
+                    item
+                    xs={12}
+                    justify="space-between"
+                    alignItems="center"
+                    style={{ paddingTop: "0px" }}
+                >
+                    <Grid item>
+                        <Typography variant="h5" onClick={toggle}>
+                            {entry ? "Edit Transaction" : "Add Transaction"}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <IconButton
+                            aria-label="close"
+                            onClick={toggle}
+                            component="span"
+                        >
+                            <MdClose
+                                className={classes.closeButton}
+                                aria-label="Close"
+                            ></MdClose>
+                        </IconButton>
+                    </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                    <Controller
+                        name="description"
+                        control={control}
+                        render={({ field }) => (
+                            <TextField label="Description" {...field} />
+                        )}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <Controller
+                        name="amount"
+                        control={control}
+                        render={({ field }) => (
+                            <TextField label="Sum" type="number" {...field} />
+                        )}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <Controller
+                        name="category"
+                        control={control}
+                        render={({ field }) => (
+                            <TextField label="Category" {...field} />
+                        )}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <Controller
+                        name="subCategory"
+                        control={control}
+                        render={({ field }) => (
+                            <TextField label="Sub-Category" {...field} />
+                        )}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <Controller
+                        name="timestamp"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DateTimePicker
+                                    label="Date"
+                                    value={value}
+                                    onChange={onChange}
+                                />
+                            </MuiPickersUtilsProvider>
+                        )}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <Controller
+                        name="isExpense"
+                        control={control}
+                        render={({ field }) => (
+                            <FormControl
+                                component="fieldset"
+                                onChange={entryToggleHandler}
+                            >
+                                <RadioGroup
+                                    aria-label="entryType"
+                                    name="entryType1"
+                                    {...field}
+                                >
+                                    <FormControlLabel
+                                        value="expense"
+                                        control={
+                                            <Radio
+                                                color="default"
+                                                className={classes.radio}
+                                            />
+                                        }
+                                        label="Expense"
+                                    />
+                                    <FormControlLabel
+                                        value="income"
+                                        control={
+                                            <Radio
+                                                color="default"
+                                                className={classes.radio}
+                                            />
+                                        }
+                                        label="Income"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                        )}
+                    />
+                </Grid>
+                <Grid item xs={12} style={{ paddingBottom: "0px" }}>
+                    <Button
+                        className={classes.modalButton}
+                        type="submit"
+                        variant="contained"
+                        color="default"
+                        style={{ backgroundColor: "#37474F", color: "white" }}
+                    >
+                        {entry ? "Save" : "Add Transaction"}
+                    </Button>
+                    {entry ? null : (
+                        <Button
+                            className={classes.modalButton}
+                            type="button"
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => reset()}
+                        >
+                            Clear
+                        </Button>
+                    )}
+                </Grid>
+            </Grid>
+        </form>
+    );
 };
 
 export default withStyles(styles)(DetailedEntry);

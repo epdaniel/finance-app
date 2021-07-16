@@ -1,51 +1,106 @@
 import axios from "axios";
-import React, { useState, useEffect } from 'react';
-import UserProfile from "./userProfile";
+import Modal from "./Modal";
 import Entry from "./Entry";
+import { useAuth } from "./useAuth";
+import DetailedEntry from "./DetailedEntry";
+import React, { useState, useEffect } from "react";
+import { Grid, Typography, IconButton } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { Grid, Typography } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 
 const styles = {
-
+    containerGrid: {
+        width: "auto",
+    },
 };
 
 const EntryViewer = ({ classes }) => {
-    const [entries, setEntries] = useState([])
+    const auth = useAuth();
+    const [entries, setEntries] = useState([]);
+    const [showEntryModal, setShowEntryModal] = useState(false);
 
     useEffect(() => {
-        console.log("Loading entries!")
-        loadAllEntries();
-    }, []);
-
-    const loadAllEntries = async () => {
-        if (UserProfile.isLoggedIn()) {
-            axios.get("/entries/all", {
-                headers: {
-                    id_token: UserProfile.getId(),
-                }
-            }).then(res => {
-                console.log(res)
-                let entries = res.data
-                console.log('got ' + entries.length + ' entries')
-                setEntries(res.data)
-            })
-                .catch(e => {
-                    alert("PLACEHOLDER ERROR DISPLAY: " + e.message)
+        console.log("Loading entries...");
+        if (auth.loggedIn && auth.idToken) {
+            axios
+                .get("/entries/all", {
+                    headers: {
+                        Authorization: auth.idToken,
+                    },
+                })
+                .then((res) => setEntries(res.data))
+                .catch((e) => {
+                    alert("PLACEHOLDER ERROR DISPLAY: " + e.message);
                 });
         } else {
-            setEntries([])
+            setEntries([]);
         }
-    }
+    }, [auth]);
+
+    const toggleEntryModal = () => setShowEntryModal((prev) => !prev);
+
+    const addEntryToList = (entry) => {
+        setEntries([entry, ...entries]);
+    };
+    const updateEntry = (index) => {
+        return (newEntry) =>
+            setEntries([
+                ...entries.slice(0, index),
+                newEntry,
+                ...entries.slice(index + 1),
+            ]);
+    };
 
     return (
-        <div>
-            {(!Array.isArray(entries) || entries.length === 0) ? <div>No Transactions yet.</div> :
-                entries.map((data, key) => {
-                    return <Entry key={key} entry={data}></Entry>;
-                })
-            }
-        </div>
-    )
-}
+        <>
+            <Modal showModal={showEntryModal} setShowModal={toggleEntryModal}>
+                <DetailedEntry
+                    toggleModal={toggleEntryModal}
+                    addEntryToList={addEntryToList}
+                />
+            </Modal>
+            <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+                spacing={2}
+                className={classes.containerGrid}
+            >
+                <Grid
+                    item
+                    container
+                    justify="space-between"
+                    alignItems="center"
+                >
+                    <Grid item>
+                        <Typography variant="h4">Transactions</Typography>
+                    </Grid>
+                    <Grid item>
+                        <IconButton
+                            aria-label="add entry"
+                            onClick={toggleEntryModal}
+                            component="span"
+                        >
+                            <AddIcon fontSize="large" />
+                        </IconButton>
+                    </Grid>
+                </Grid>
+                {!Array.isArray(entries) || entries.length === 0 ? (
+                    <div>No Transactions yet.</div>
+                ) : (
+                    entries.map((data, i) => (
+                        <Grid item key={data.id}>
+                            <Entry
+                                entry={data}
+                                updateEntry={updateEntry(i)}
+                            ></Entry>
+                        </Grid>
+                    ))
+                )}
+            </Grid>
+        </>
+    );
+};
 
 export default withStyles(styles)(EntryViewer);
